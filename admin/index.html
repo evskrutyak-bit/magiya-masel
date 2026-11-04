@@ -470,6 +470,11 @@
       <span class="brand__badge">Mock CMS</span>
     </div>
     <div class="topbar__actions">
+      <button id="dbStatusBtn" onclick="openDbModal()" class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px; gap: 6px;">
+        <span id="dbStatusDot" style="width: 8px; height: 8px; border-radius: 50%; background: var(--warning); box-shadow: 0 0 6px var(--warning); display: inline-block;"></span>
+        <span id="dbStatusText">База: Mock (Локально)</span>
+        <span style="font-size: 10px; opacity: 0.6;">⚙️</span>
+      </button>
       <a href="../index.html" target="_blank" class="btn btn-secondary">
         <span>👁️ Открыть сайт</span>
       </a>
@@ -661,8 +666,109 @@
     <span id="toastMsg">Изменения успешно сохранены!</span>
   </div>
 
+  <!-- Supabase Settings Modal -->
+  <div id="dbModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:2000; align-items:center; justify-content:center;">
+    <div style="background:var(--surface); border:1px solid var(--border-focus); border-radius:var(--radius-md); max-width:540px; width:90%; padding:26px; box-shadow:0 20px 40px rgba(0,0,0,0.8);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:18px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:8px;">
+          <span>⚡</span> Подключение облачной базы Supabase
+        </h3>
+        <button onclick="closeDbModal()" style="background:none; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">✕</button>
+      </div>
+
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:18px; line-height:1.45;">
+        Вставьте параметры вашего проекта Supabase. Если поля пустые, админка продолжит бесперебойно работать в режиме локального mock-хранилища.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label">Project URL (Адрес проекта)</label>
+        <input type="text" id="supabase_url_input" class="form-input" placeholder="https://xyzcompany.supabase.co">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Anon Public API Key (Публичный ключ)</label>
+        <input type="password" id="supabase_key_input" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+      </div>
+
+      <div id="dbTestStatus" style="font-size:12px; margin-bottom:16px; min-height:18px;"></div>
+
+      <div style="display:flex; justify-content:space-between; gap:10px;">
+        <button onclick="testDbConnection()" class="btn btn-secondary">
+          <span>🔍 Проверить связь</span>
+        </button>
+        <div style="display:flex; gap:10px;">
+          <button onclick="closeDbModal()" class="btn btn-secondary">Отмена</button>
+          <button onclick="saveDbConfig()" class="btn btn-primary">💾 Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/supabase-client.js"></script>
   <script>
-    // Initial Mock Data
+    function openDbModal() {
+      const cfg = window.SupabaseBridge ? window.SupabaseBridge.getConfig() : {};
+      document.getElementById("supabase_url_input").value = cfg.url || "";
+      document.getElementById("supabase_key_input").value = cfg.anonKey || "";
+      document.getElementById("dbTestStatus").textContent = "";
+      document.getElementById("dbModal").style.display = "flex";
+    }
+
+    function closeDbModal() {
+      document.getElementById("dbModal").style.display = "none";
+    }
+
+    async function testDbConnection() {
+      const statusEl = document.getElementById("dbTestStatus");
+      const url = document.getElementById("supabase_url_input").value;
+      const key = document.getElementById("supabase_key_input").value;
+
+      statusEl.textContent = "⏳ Проверка подключения к базе Supabase...";
+      statusEl.style.color = "var(--warning)";
+
+      if (!window.SupabaseBridge) return;
+      const res = await window.SupabaseBridge.testConnection(url, key);
+
+      statusEl.textContent = res.message;
+      statusEl.style.color = res.success ? "var(--success)" : "var(--danger)";
+    }
+
+    function saveDbConfig() {
+      const url = document.getElementById("supabase_url_input").value;
+      const key = document.getElementById("supabase_key_input").value;
+      if (window.SupabaseBridge) {
+        window.SupabaseBridge.setConfig(url, key);
+        updateDbBadge();
+      }
+      closeDbModal();
+      showToast("Настройки Supabase сохранены");
+    }
+
+    function updateDbBadge() {
+      if (!window.SupabaseBridge) return;
+      const configured = window.SupabaseBridge.isConfigured();
+      const dot = document.getElementById("dbStatusDot");
+      const text = document.getElementById("dbStatusText");
+
+      if (configured) {
+        dot.style.background = "var(--success)";
+        dot.style.boxShadow = "0 0 8px var(--success)";
+        text.textContent = "База: Supabase Cloud";
+      } else {
+        dot.style.background = "var(--warning)";
+        dot.style.boxShadow = "0 0 8px var(--warning)";
+        text.textContent = "База: Mock (Локально)";
+      }
+    }
+
+    // Call updateDbBadge on init
+    const originalLoadState = window.onload;
+    window.onload = function() {
+      if (originalLoadState) originalLoadState();
+      updateDbBadge();
+    };
+  </script>
+</body>
     const defaultData = {
       oils: [
         { id: 1, name: "Льняное масло", sub: "Золотистый лён, мягкий вкус", p100: "250 ₽", p250: "450 ₽", p500: "800 ₽", inStock: true },
