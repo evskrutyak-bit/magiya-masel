@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Магия Масел • Панель управления (Admin CMS)</title>
+  <style>
+    :root {
+      --bg: #111812;
+      --surface: #1a231b;
+      --surface-card: #222d24;
+      --surface-hover: #2b392e;
+      --border: rgba(229, 163, 60, 0.15);
+      --border-focus: rgba(229, 163, 60, 0.6);
+      --accent: #E5A33C;
+      --accent-glow: rgba(229, 163, 60, 0.25);
+      --text: #F3EFE6;
+      --text-muted: #9EAB9D;
+      --text-dim: #6B786B;
+      --success: #4ADE80;
+      --success-bg: rgba(74, 222, 128, 0.15);
+      --warning: #FBBF24;
+      --danger: #F87171;
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.5;
+      padding-bottom: 90px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Nav */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(26, 35, 27, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand__logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), #B37419);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+    .brand__title {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+    .brand__badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      background: rgba(229, 163, 60, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(229, 163, 60, 0.3);
+      border-radius: 999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .topbar__actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+    .btn-secondary {
+      background: var(--surface-card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-focus);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #111812;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-primary:hover {
+      background: #F2AF4B;
+      transform: translateY(-1px);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1040px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    /* Tabs Navigation */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--surface);
+      padding: 6px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+    .nav-tab {
+      flex: 1;
+      min-width: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .nav-tab:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .nav-tab.active {
+      background: var(--surface-card);
+      color: var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+    }
+
+    /* Content Panels */
+    .panel {
+      display: none;
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(229, 163, 60, 0.08);
+    }
+    .card__title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card__desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Form controls */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Oil Table / Cards */
+    .oil-item {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr auto;
+      gap: 14px;
+      align-items: center;
+      transition: border-color 0.2s ease;
+    }
+    .oil-item:hover {
+      border-color: rgba(229, 163, 60, 0.4);
+    }
+    .oil-item__name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .oil-item__sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Switch / Toggle */
+    .switch-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #313d33;
+      transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text);
+      transition: .3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--accent);
+      border-color: var(--accent);
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+      background-color: #111812;
+    }
+    .switch-label {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .badge-status {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .badge-in-stock {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    .badge-preorder {
+      background: rgba(251, 191, 36, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    /* Search SERP Preview */
+    .serp-preview {
+      background: #ffffff;
+      color: #1a0dab;
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin-top: 12px;
+      border: 1px solid #dfe1e5;
+    }
+    .serp-preview__url {
+      color: #202124;
+      font-size: 12px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .serp-preview__title {
+      color: #1a0dab;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+    .serp-preview__title:hover { text-decoration: underline; }
+    .serp-preview__desc {
+      color: #4d5156;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    /* Floating Save Bar */
+    .save-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(26, 35, 27, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-focus);
+      border-radius: var(--radius-lg);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
+      z-index: 100;
+    }
+    .save-bar__status {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .save-bar__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      background: #1B261D;
+      border: 1px solid var(--success);
+      color: var(--text);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .oil-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .form-grid-2, .form-grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .nav-tabs {
+        justify-content: flex-start;
+      }
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .save-bar {
+        width: 90%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand__logo">🫒</div>
+      <div>
+        <div class="brand__title">Магия Масел</div>
+        <div style="font-size: 11px; color: var(--text-muted);">Панель управления предпринимателя</div>
+      </div>
+      <span class="brand__badge">Mock CMS</span>
+    </div>
+    <div class="topbar__actions">
+      <a href="../index.html" target="_blank" class="btn btn-secondary">
+        <span>👁️ Открыть сайт</span>
+      </a>
+      <button onclick="resetDefaults()" class="btn btn-secondary" title="Сбросить к исходным данным">
+        <span>🔄 Сбросить</span>
+      </button>
+      <button onclick="saveChanges()" class="btn btn-primary">
+        <span>💾 Сохранить</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('tab-oils')">
+        <span>🫒</span> Витрина и цены
+      </button>
+      <button class="nav-tab" onclick="switchTab('tab-press')">
+        <span>⏳</span> Отжим дня и статус
+      </button>
+      <button class="nav-tab" onclick="switchTab('tab-contacts')">
+        <span>📍</span> Контакты и рынок
+      </button>
+      <button class="nav-tab" onclick="switchTab('tab-seo')">
+        <span>🔍</span> SEO и Яндекс
+      </button>
+    </nav>
+
+    <!-- TAB 1: Витрина и цены -->
+    <div id="tab-oils" class="panel active">
+      <div class="card">
+        <div class="card__header">
+          <div>
+            <h2 class="card__title">🫒 Управление ассортиментом масел</h2>
+            <p class="card__desc">Цены за объём и статус наличия на прилавке Центрального рынка.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="addOilRow()">+ Добавить масло</button>
+        </div>
+
+        <div id="oilsList">
+          <!-- Filled via JS from localStorage/mock -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Отжим дня и статус -->
+    <div id="tab-press" class="panel">
+      <div class="card">
+        <div class="card__header">
+          <div>
+            <h2 class="card__title">⏳ Статус прилавка и свежий отжим</h2>
+            <p class="card__desc">Информация, которая выводится в самом первом экране для посетителей.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Статус прилавка сегодня</label>
+          <div class="form-grid-3">
+            <label class="switch-wrap" style="background: var(--surface-card); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+              <input type="radio" name="market_status" value="open" checked onchange="updatePressState()">
+              <span class="switch-label">🟢 Открыты (ждём гостей)</span>
+            </label>
+            <label class="switch-wrap" style="background: var(--surface-card); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+              <input type="radio" name="market_status" value="busy" onchange="updatePressState()">
+              <span class="switch-label">🟡 Отжим в процессе</span>
+            </label>
+            <label class="switch-wrap" style="background: var(--surface-card); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+              <input type="radio" name="market_status" value="closed" onchange="updatePressState()">
+              <span class="switch-label">🔴 Точка закрыта</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Часы работы точки на рынке</label>
+            <input type="text" id="market_hours" class="form-input" value="Вторник – Воскресенье: 9:00–19:00 (Пн — выходной)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Очередной плановый отжим</label>
+            <input type="text" id="next_press_time" class="form-input" value="Сегодня в 14:00 и 17:30">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Анонс отжима дня (строка в первом экране)</label>
+          <input type="text" id="press_announcement" class="form-input" value="Сегодня в прессе: сыродавленный чёрный тмин свежей партии (Эфиопия)">
+        </div>
+
+        <div class="form-group">
+          <label class="switch-wrap">
+            <label class="switch">
+              <input type="checkbox" id="show_ambient_badge" checked>
+              <span class="slider"></span>
+            </label>
+            <span class="switch-label">Показывать пульсирующий индикатор «Жмём при вас» в шапке сайта</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Контакты и рынок -->
+    <div id="tab-contacts" class="panel">
+      <div class="card">
+        <div class="card__header">
+          <div>
+            <h2 class="card__title">📍 Контакты, адрес и предзаказ</h2>
+            <p class="card__desc">Куда звонить клиентам и как найти прилавок на рынке.</p>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Телефон для звонков и брони</label>
+            <input type="text" id="contact_phone" class="form-input" value="+7 (921) 123-45-67">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telegram контакт / канал</label>
+            <input type="text" id="contact_tg" class="form-input" value="@magiyamasel_kld">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Точный адрес прилавка</label>
+          <input type="text" id="market_address" class="form-input" value="Калининград, ул. Черняховского, 15 (Центральный рынок)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ориентир внутри павильона</label>
+          <input type="text" id="market_location_hint" class="form-input" value="Павильон молочных продуктов, центральный проход, место 12 (рядом с фермерскими сырами)">
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: SEO и Яндекс -->
+    <div id="tab-seo" class="panel">
+      <div class="card">
+        <div class="card__header">
+          <div>
+            <h2 class="card__title">🔍 Поисковая оптимизация (SEO)</h2>
+            <p class="card__desc">Как сайт отображается в Яндексе и Google при поиске «масло холодного отжима Калининград».</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Title (Заголовок во вкладке и в поиске)</label>
+          <input type="text" id="seo_title" class="form-input" value="Магия Масел — Попробуйте масло до того, как платить | Калининград" oninput="renderSerp()">
+          <small style="color: var(--text-dim); font-size: 12px; margin-top: 4px; display: block;">Рекомендуемая длина: до 60 символов.</small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description (Сниппет в Яндексе)</label>
+          <textarea id="seo_desc" class="form-textarea" oninput="renderSerp()">Попробуйте масло до того, как платить. Отжимаем при вас: видно семечку, пресс и стакан. Центральный рынок Калининграда, павильон молочных продуктов, 9:00–19:00.</textarea>
+          <small style="color: var(--text-dim); font-size: 12px; margin-top: 4px; display: block;">Рекомендуемая длина: 140–160 символов.</small>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <label class="form-label">Живой предпросмотр в поиске Яндекса:</label>
+          <div class="serp-preview">
+            <div class="serp-preview__url">
+              <span style="color: #007700; font-weight: 500;">magiyamasel.ru</span>
+              <span style="color: #70757a;">› калининград</span>
+            </div>
+            <div class="serp-preview__title" id="serpTitlePreview">Магия Масел — Попробуйте масло до того, как платить | Калининград</div>
+            <div class="serp-preview__desc" id="serpDescPreview">Попробуйте масло до того, как платить. Отжимаем при вас: видно семечку, пресс и стакан. Центральный рынок Калининграда, павильон молочных продуктов, 9:00–19:00.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Save Bar -->
+  <div class="save-bar">
+    <div class="save-bar__status">
+      <div class="save-bar__dot"></div>
+      <span id="saveStatusText">Локальные данные синхронизированы</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button onclick="saveChanges()" class="btn btn-primary">
+        <span>💾 Сохранить изменения</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <span>✅</span>
+    <span id="toastMsg">Изменения успешно сохранены!</span>
+  </div>
+
+  <script>
+    // Initial Mock Data
+    const defaultData = {
+      oils: [
+        { id: 1, name: "Льняное масло", sub: "Золотистый лён, мягкий вкус", p100: "250 ₽", p250: "450 ₽", p500: "800 ₽", inStock: true },
+        { id: 2, name: "Масло чёрного тмина", sub: "Эфиопский сорт, терпкое", p100: "900 ₽", p250: "1 900 ₽", p500: "3 500 ₽", inStock: true },
+        { id: 3, name: "Тыквенное масло", sub: "Штирийская голосемянная", p100: "600 ₽", p250: "1 300 ₽", p500: "2 400 ₽", inStock: true },
+        { id: 4, name: "Кунжутное масло", sub: "Светлый кунжут, сладковатый тон", p100: "400 ₽", p250: "850 ₽", p500: "1 500 ₽", inStock: true },
+        { id: 5, name: "Кедровое масло", sub: "Таёжный орех, ручной отжим", p100: "1 200 ₽", p250: "2 600 ₽", p500: "4 900 ₽", inStock: true },
+        { id: 6, name: "Конопляное масло", sub: "Пищевая конопля, ореховый тон", p100: "500 ₽", p250: "1 100 ₽", p500: "2 000 ₽", inStock: false },
+        { id: 7, name: "Масло расторопши", sub: "Для печени и ЖКТ, без горечи", p100: "450 ₽", p250: "950 ₽", p500: "1 750 ₽", inStock: true },
+        { id: 8, name: "Рыжиковое масло", sub: "Старинный русский рецепт", p100: "300 ₽", p250: "600 ₽", p500: "1 100 ₽", inStock: true }
+      ],
+      press: {
+        status: "open",
+        hours: "Вторник – Воскресенье: 9:00–19:00 (Пн — выходной)",
+        nextPress: "Сегодня в 14:00 и 17:30",
+        announcement: "Сегодня в прессе: сыродавленный чёрный тмин свежей партии (Эфиопия)",
+        showBadge: true
+      },
+      contacts: {
+        phone: "+7 (921) 123-45-67",
+        telegram: "@magiyamasel_kld",
+        address: "Калининград, ул. Черняховского, 15 (Центральный рынок)",
+        locationHint: "Павильон молочных продуктов, центральный проход, место 12 (рядом с фермерскими сырами)"
+      },
+      seo: {
+        title: "Магия Масел — Попробуйте масло до того, как платить | Калининград",
+        description: "Попробуйте масло до того, как платить. Отжимаем при вас: видно семечку, пресс и стакан. Центральный рынок Калининграда, павильон молочных продуктов, 9:00–19:00."
+      }
+    };
+
+    let appState = {};
+
+    function loadState() {
+      const saved = localStorage.getItem("magiya_masel_cms_state");
+      if (saved) {
+        try {
+          appState = JSON.parse(saved);
+        } catch (e) {
+          appState = JSON.parse(JSON.stringify(defaultData));
+        }
+      } else {
+        appState = JSON.parse(JSON.stringify(defaultData));
+      }
+      renderAll();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll(".nav-tab").forEach(tab => tab.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
+      
+      const targetBtn = Array.from(document.querySelectorAll(".nav-tab")).find(b => b.getAttribute("onclick").includes(tabId));
+      if (targetBtn) targetBtn.classList.add("active");
+      
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) targetPanel.classList.add("active");
+    }
+
+    function renderOils() {
+      const container = document.getElementById("oilsList");
+      container.innerHTML = "";
+
+      appState.oils.forEach((oil, idx) => {
+        const item = document.createElement("div");
+        item.className = "oil-item";
+        item.innerHTML = `
+          <div>
+            <input type="text" class="form-input" style="font-weight:700; margin-bottom:4px;" value="${oil.name}" onchange="updateOil(${idx}, 'name', this.value)">
+            <input type="text" class="form-input" style="font-size:12px; color:var(--text-muted);" value="${oil.sub}" onchange="updateOil(${idx}, 'sub', this.value)">
+          </div>
+          <div>
+            <small style="font-size:11px; color:var(--text-dim); display:block; margin-bottom:2px;">100 мл</small>
+            <input type="text" class="form-input" value="${oil.p100}" onchange="updateOil(${idx}, 'p100', this.value)">
+          </div>
+          <div>
+            <small style="font-size:11px; color:var(--text-dim); display:block; margin-bottom:2px;">250 мл</small>
+            <input type="text" class="form-input" value="${oil.p250}" onchange="updateOil(${idx}, 'p250', this.value)">
+          </div>
+          <div>
+            <small style="font-size:11px; color:var(--text-dim); display:block; margin-bottom:2px;">500 мл</small>
+            <input type="text" class="form-input" value="${oil.p500}" onchange="updateOil(${idx}, 'p500', this.value)">
+          </div>
+          <div>
+            <span class="badge-status ${oil.inStock ? 'badge-in-stock' : 'badge-preorder'}" id="badge-${idx}">
+              ${oil.inStock ? '● В наличии' : '○ Под заказ'}
+            </span>
+            <label class="switch-wrap" style="margin-top:6px;">
+              <label class="switch">
+                <input type="checkbox" ${oil.inStock ? 'checked' : ''} onchange="toggleStock(${idx}, this.checked)">
+                <span class="slider"></span>
+              </label>
+              <span style="font-size:11px; color:var(--text-muted);">Наличие</span>
+            </label>
+          </div>
+          <div>
+            <button class="btn btn-secondary" style="padding:6px 10px; color:var(--danger);" onclick="deleteOil(${idx})" title="Удалить позицию">✕</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function updateOil(index, field, value) {
+      appState.oils[index][field] = value;
+      notifyDirty();
+    }
+
+    function toggleStock(index, isChecked) {
+      appState.oils[index].inStock = isChecked;
+      const badge = document.getElementById(`badge-${index}`);
+      if (badge) {
+        badge.className = `badge-status ${isChecked ? 'badge-in-stock' : 'badge-preorder'}`;
+        badge.textContent = isChecked ? '● В наличии' : '○ Под заказ';
+      }
+      notifyDirty();
+    }
+
+    function addOilRow() {
+      appState.oils.push({
+        id: Date.now(),
+        name: "Новое сыродавленное масло",
+        sub: "Описание сырья и вкуса",
+        p100: "500 ₽",
+        p250: "1 000 ₽",
+        p500: "1 800 ₽",
+        inStock: true
+      });
+      renderOils();
+      notifyDirty();
+    }
+
+    function deleteOil(index) {
+      if (confirm(`Удалить масло «${appState.oils[index].name}» из витрины?`)) {
+        appState.oils.splice(index, 1);
+        renderOils();
+        notifyDirty();
+      }
+    }
+
+    function renderSerp() {
+      const title = document.getElementById("seo_title").value;
+      const desc = document.getElementById("seo_desc").value;
+      document.getElementById("serpTitlePreview").textContent = title || "Магия Масел";
+      document.getElementById("serpDescPreview").textContent = desc || "Описание сайта...";
+      notifyDirty();
+    }
+
+    function notifyDirty() {
+      document.getElementById("saveStatusText").textContent = "Есть несохранённые правки...";
+      document.getElementById("saveStatusText").style.color = "var(--warning)";
+    }
+
+    function renderAll() {
+      renderOils();
+
+      // Press
+      const radio = document.querySelector(`input[name="market_status"][value="${appState.press.status}"]`);
+      if (radio) radio.checked = true;
+      document.getElementById("market_hours").value = appState.press.hours;
+      document.getElementById("next_press_time").value = appState.press.nextPress;
+      document.getElementById("press_announcement").value = appState.press.announcement;
+      document.getElementById("show_ambient_badge").checked = appState.press.showBadge;
+
+      // Contacts
+      document.getElementById("contact_phone").value = appState.contacts.phone;
+      document.getElementById("contact_tg").value = appState.contacts.telegram;
+      document.getElementById("market_address").value = appState.contacts.address;
+      document.getElementById("market_location_hint").value = appState.contacts.locationHint;
+
+      // SEO
+      document.getElementById("seo_title").value = appState.seo.title;
+      document.getElementById("seo_desc").value = appState.seo.description;
+      renderSerp();
+
+      document.getElementById("saveStatusText").textContent = "Локальные данные синхронизированы";
+      document.getElementById("saveStatusText").style.color = "var(--text-muted)";
+    }
+
+    function saveChanges() {
+      // Collect values
+      const statusRadio = document.querySelector('input[name="market_status"]:checked');
+      appState.press = {
+        status: statusRadio ? statusRadio.value : "open",
+        hours: document.getElementById("market_hours").value,
+        nextPress: document.getElementById("next_press_time").value,
+        announcement: document.getElementById("press_announcement").value,
+        showBadge: document.getElementById("show_ambient_badge").checked
+      };
+
+      appState.contacts = {
+        phone: document.getElementById("contact_phone").value,
+        telegram: document.getElementById("contact_tg").value,
+        address: document.getElementById("market_address").value,
+        locationHint: document.getElementById("market_location_hint").value
+      };
+
+      appState.seo = {
+        title: document.getElementById("seo_title").value,
+        description: document.getElementById("seo_desc").value
+      };
+
+      localStorage.setItem("magiya_masel_cms_state", JSON.stringify(appState));
+
+      document.getElementById("saveStatusText").textContent = "Все изменения сохранены!";
+      document.getElementById("saveStatusText").style.color = "var(--success)";
+
+      showToast("✓ Изменения успешно сохранены в хранилище CMS!");
+    }
+
+    function resetDefaults() {
+      if (confirm("Сбросить все настройки к исходным учебным значениям?")) {
+        localStorage.removeItem("magiya_masel_cms_state");
+        loadState();
+        showToast("Данные сброшены к исходным");
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastMsg").textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    window.onload = loadState;
+  </script>
+</body>
+</html>
