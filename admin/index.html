@@ -761,14 +761,6 @@
       }
     }
 
-    // Call updateDbBadge on init
-    const originalLoadState = window.onload;
-    window.onload = function() {
-      if (originalLoadState) originalLoadState();
-      updateDbBadge();
-    };
-  </script>
-</body>
     const defaultData = {
       oils: [
         { id: 1, name: "Льняное масло", sub: "Золотистый лён, мягкий вкус", p100: "250 ₽", p250: "450 ₽", p500: "800 ₽", inStock: true },
@@ -992,7 +984,10 @@
       setTimeout(() => toast.classList.remove("show"), 2800);
     }
 
-    window.onload = loadState;
+    window.onload = function() {
+      loadState();
+      if (typeof updateDbBadge === "function") updateDbBadge();
+    };
   </script>
 </body>
 </html>
