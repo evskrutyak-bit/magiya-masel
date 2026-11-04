@@ -502,6 +502,9 @@
       <button class="nav-tab" onclick="switchTab('tab-seo')">
         <span>🔍</span> SEO и Яндекс
       </button>
+      <button class="nav-tab" onclick="switchTab('tab-orders')">
+        <span>📦</span> Заказы с сайта <span id="ordersBadge" style="display:none;background:#E5A33C;color:#10130C;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;margin-left:6px;">0</span>
+      </button>
     </nav>
 
     <!-- TAB 1: Витрина и цены -->
@@ -643,6 +646,20 @@
             <div class="serp-preview__desc" id="serpDescPreview">Живое масло холодного отжима. Отжимаем при вас: видно семечку, пресс и стакан. Центральный рынок Калининграда, павильон молочных продуктов, 9:00–19:00.</div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: Заказы с сайта -->
+    <div id="tab-orders" class="panel">
+      <div class="card">
+        <div class="card__header">
+          <div>
+            <h2 class="card__title">📦 Заявки и заказы с витрины</h2>
+            <p class="card__desc">Здесь появляются клиенты, нажавшие «Заказать» на сайте и оставившие свой телефон.</p>
+          </div>
+          <button class="btn btn--outline" onclick="clearAllOrders()">Очистить список</button>
+        </div>
+        <div id="ordersList" style="display:flex;flex-direction:column;gap:12px;margin-top:16px;"></div>
       </div>
     </div>
   </div>
@@ -938,6 +955,9 @@
       document.getElementById("seo_desc").value = appState.seo.description;
       renderSerp();
 
+      // Orders
+      renderOrders();
+
       document.getElementById("saveStatusText").textContent = "Локальные данные синхронизированы";
       document.getElementById("saveStatusText").style.color = "var(--text-muted)";
     }
@@ -971,6 +991,92 @@
       document.getElementById("saveStatusText").style.color = "var(--success)";
 
       showToast("✓ Изменения успешно сохранены в хранилище CMS!");
+    }
+
+    
+    function renderOrders() {
+      const container = document.getElementById("ordersList");
+      if (!container) return;
+      const badge = document.getElementById("ordersBadge");
+      let orders = [];
+      try {
+        orders = JSON.parse(localStorage.getItem("magiya_masel_orders") || "[]");
+      } catch (e) { orders = []; }
+
+      if (badge) {
+        if (orders.length > 0) {
+          badge.textContent = orders.length;
+          badge.style.display = "inline-block";
+        } else {
+          badge.style.display = "none";
+        }
+      }
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:48px 20px;color:var(--text-dim);border:1px dashed var(--border);border-radius:14px;">
+            <div style="font-size:36px;margin-bottom:12px;">📭</div>
+            <div style="font-size:16px;color:#fff;font-weight:500;margin-bottom:6px;">Пока нет заявок через сайт</div>
+            <p style="font-size:13px;max-width:360px;margin:0 auto 16px;">Все прямые клиенты пишут Кириллу в Telegram или звонят напрямую. Когда кто-то заполнит форму заказа на сайте, заявка сразу появится здесь.</p>
+            <button class="btn btn--outline" onclick="createSampleOrder()">+ Создать тестовую заявку</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = "";
+      orders.forEach((ord, idx) => {
+        const item = document.createElement("div");
+        item.style = "background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;";
+        item.innerHTML = `
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+              <span style="font-weight:700;font-size:16px;color:#fff;">${ord.oil}</span>
+              <span style="background:rgba(229,163,60,0.15);color:var(--amber);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:600;">${ord.volume || "250 мл"} · ${ord.price || ""}</span>
+              <span style="font-size:11px;color:var(--text-dim);">${ord.date}</span>
+            </div>
+            <div style="font-size:14px;color:var(--text-dim);">
+              Клиент: <strong style="color:#fff;">${ord.clientName}</strong> &nbsp;·&nbsp; Тел: <a href="tel:${ord.clientPhone}" style="color:var(--amber);text-decoration:none;font-weight:600;">${ord.clientPhone}</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <a href="tel:${ord.clientPhone}" class="btn btn--primary" style="padding:8px 16px;font-size:13px;text-decoration:none;">📞 Набрать</a>
+            <button class="btn btn--outline" style="padding:8px 14px;font-size:13px;" onclick="deleteOrder(${idx})">✓ Выполнен</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function createSampleOrder() {
+      const sample = {
+        id: "ord_" + Date.now(),
+        date: new Date().toLocaleString("ru-RU"),
+        oil: "Масло чёрного тмина",
+        volume: "250 мл",
+        price: "3 500 ₽",
+        clientName: "Елена (Калининград)",
+        clientPhone: "+7 (909) 777-12-34",
+        status: "new"
+      };
+      const orders = JSON.parse(localStorage.getItem("magiya_masel_orders") || "[]");
+      orders.unshift(sample);
+      localStorage.setItem("magiya_masel_orders", JSON.stringify(orders));
+      renderOrders();
+    }
+
+    function deleteOrder(idx) {
+      const orders = JSON.parse(localStorage.getItem("magiya_masel_orders") || "[]");
+      orders.splice(idx, 1);
+      localStorage.setItem("magiya_masel_orders", JSON.stringify(orders));
+      renderOrders();
+    }
+
+    function clearAllOrders() {
+      if (confirm("Очистить все заявки?")) {
+        localStorage.removeItem("magiya_masel_orders");
+        renderOrders();
+      }
     }
 
     function resetDefaults() {
