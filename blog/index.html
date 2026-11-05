@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Блог о сыродавленных маслах — Магия Масел (Калининград)</title>
+<meta name="description" content="Статьи о технологии бережного холодного отжима, вкусе, кулинарных традициях и правилах хранения живых сыродавленных масел без нагрева.">
+<link rel="stylesheet" href="../assets/magiya-masla.css">
+<style>
+/* Стили блога в эталонной палитре Магии Масел */
+.brand__znak { width: 48px !important; height: 48px !important; max-width: 48px !important; flex: 0 0 48px !important; }
+
+.blog-hero {
+  padding: 120px 0 60px;
+  border-bottom: 1px solid var(--liniya);
+  background: radial-gradient(circle at 50% 20%, #1c2214 0%, var(--noch) 80%);
+}
+.blog-hero__tag {
+  display: inline-block;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--yantar);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.blog-hero h1 {
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.15;
+  color: var(--tekst);
+  margin-bottom: 20px;
+  max-width: 820px;
+}
+.blog-hero p {
+  font-size: clamp(16px, 2vw, 19px);
+  color: var(--tekst-2);
+  line-height: 1.6;
+  max-width: 720px;
+}
+.blog-wrap {
+  padding: 60px 0 100px;
+}
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
+  margin-bottom: 64px;
+}
+.b-card {
+  background: var(--oliva);
+  border: 1px solid var(--liniya);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+}
+.b-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--yantar);
+  background: #343e27;
+}
+.b-card__img-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #171d10;
+  position: relative;
+}
+.b-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+  display: block;
+}
+.b-card:hover .b-card__img {
+  transform: scale(1.05);
+}
+.b-card__body {
+  padding: 24px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.b-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.b-card__rubric {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--yantar);
+  font-weight: 600;
+}
+.b-card__time {
+  font-size: 13px;
+  color: var(--tekst-2);
+}
+.b-card__h {
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--tekst);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.b-card__txt {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--tekst-2);
+  margin-bottom: 24px;
+  flex-grow: 1;
+}
+.b-card__more {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--yantar);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.blog-cta {
+  background: var(--kost);
+  color: var(--na-kosti);
+  border-radius: 8px;
+  padding: 48px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.blog-cta__text h2 {
+  font-size: 26px;
+  line-height: 1.25;
+  margin-bottom: 8px;
+  color: var(--na-kosti);
+}
+.blog-cta__text p {
+  font-size: 16px;
+  color: var(--na-kosti-2);
+  max-width: 580px;
+  line-height: 1.5;
+}
+.blog-cta .btn-yantar {
+  background: var(--yantar);
+  color: var(--na-yantare);
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 4px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.blog-cta .btn-yantar:hover {
+  filter: brightness(1.08);
+}
+</style>
+</head>
+<body class="body">
+<header class="hdr"><div class="wrap hdr__in"><a class="brand" href="../index.html"><svg class="brand__znak" width="48" height="48" xmlns="http://www.w3.org/2000/svg" viewBox="776 279 372 502" aria-hidden="true" focusable="false">
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 962.195312 283.742188 C 962.195312 283.742188 780.867188 495.769531 780.867188 595.914062 C 780.867188 696.0625 862.050781 777.246094 962.195312 777.246094 C 1062.339844 777.246094 1143.523438 696.0625 1143.523438 595.914062 C 1143.523438 495.769531 962.195312 283.742188 962.195312 283.742188 M 962.195312 300.898438 C 977.335938 319.246094 1010.804688 360.804688 1043.917969 408.683594 C 1101.886719 492.496094 1132.523438 557.238281 1132.523438 595.914062 C 1132.523438 641.414062 1114.808594 684.183594 1082.636719 716.355469 C 1050.464844 748.527344 1007.691406 766.246094 962.195312 766.246094 C 916.699219 766.246094 873.925781 748.527344 841.753906 716.355469 C 809.582031 684.183594 791.867188 641.414062 791.867188 595.914062 C 791.867188 557.242188 822.507812 492.496094 880.472656 408.683594 C 913.589844 360.804688 947.054688 319.246094 962.195312 300.898438 "/>
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 892.90625 483.878906 C 831.027344 483.878906 780.867188 534.039062 780.867188 595.914062 C 780.867188 657.792969 831.027344 707.953125 892.90625 707.953125 C 954.78125 707.953125 1004.941406 657.792969 1004.941406 595.914062 C 1004.941406 534.039062 954.78125 483.878906 892.90625 483.878906 M 892.90625 494.878906 C 948.617188 494.878906 993.941406 540.203125 993.941406 595.914062 C 993.941406 651.628906 948.617188 696.953125 892.90625 696.953125 C 837.191406 696.953125 791.867188 651.628906 791.867188 595.914062 C 791.867188 540.203125 837.191406 494.878906 892.90625 494.878906 "/>
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 892.90625 483.878906 C 854.414062 483.878906 823.210938 515.082031 823.210938 553.574219 C 823.210938 592.066406 854.414062 623.269531 892.90625 623.269531 C 931.398438 623.269531 962.601562 592.066406 962.601562 553.574219 C 962.601562 515.082031 931.398438 483.878906 892.90625 483.878906 M 892.90625 494.878906 C 925.269531 494.878906 951.601562 521.210938 951.601562 553.574219 C 951.601562 585.9375 925.269531 612.269531 892.90625 612.269531 C 860.539062 612.269531 834.210938 585.9375 834.210938 553.574219 C 834.210938 537.894531 840.316406 523.15625 851.402344 512.070312 C 862.488281 500.984375 877.226562 494.878906 892.90625 494.878906 "/>
+<path fill-rule="nonzero" fill="currentColor" fill-opacity="1" d="M 916.953125 507.925781 C 891.742188 507.925781 871.304688 528.363281 871.304688 553.574219 C 871.304688 578.785156 891.742188 599.222656 916.953125 599.222656 C 942.164062 599.222656 962.601562 578.785156 962.601562 553.574219 C 962.601562 528.363281 942.164062 507.925781 916.953125 507.925781 M 916.953125 518.925781 C 936.058594 518.925781 951.601562 534.46875 951.601562 553.574219 C 951.601562 572.679688 936.058594 588.222656 916.953125 588.222656 C 897.847656 588.222656 882.304688 572.679688 882.304688 553.574219 C 882.304688 534.46875 897.847656 518.925781 916.953125 518.925781 "/>
+</svg><span class="brand__t"><span class="brand__n">Магия Масел</span><span class="brand__s">масло холодного отжима</span></span></a><nav class="nav" aria-label="Разделы сайта"><a href="../index.html#o-nas">О нас</a><a href="../index.html#kuda">Применение</a><a href="../index.html#pozicii">Цены</a><a href="index.html" style="color:var(--yantar);">Блог</a><a href="../index.html#route">Где нас найти</a></nav><div class="hdr__act"><a class="tel" href="tel:+79147585418">+7 914 758 54 18</a><a class="knopka" href="https://yandex.ru/maps/?text=Калининград, улица Черняховского, 15–15а, Центральный рынок" rel="noopener" target="_blank">Построить маршрут</a></div></div></header>
+
+<main id="top">
+  <section class="blog-hero">
+    <div class="wrap">
+      <span class="blog-hero__tag">Семантический хаб и база знаний</span>
+      <h1>Статьи о живых сыродавленных маслах</h1>
+      <p>Факты, технология бережного отжима в капролоне и культура употребления живых масел. Без рекламной патоки и без выдуманных обещаний.</p>
+    </div>
+  </section>
+
+  <div class="wrap blog-wrap">
+    <div class="blog-grid">
+
+      <!-- Кластер 1 -->
+      <a href="../articles/maslo-chernogo-tmina-primenenie-dozirovka.html" class="b-card">
+        <div class="b-card__img-wrap">
+          <img src="../assets/black-cumin-hero.jpg" alt="Масло чёрного тмина" class="b-card__img" width="600" height="338" loading="lazy">
+        </div>
+        <div class="b-card__body">
+          <div class="b-card__meta">
+            <span class="b-card__rubric">Вкус и традиции</span>
+            <span class="b-card__time">6 мин</span>
+          </div>
+          <h2 class="b-card__h">Масло чёрного тмина: как правильно принимать, особенности и противопоказания</h2>
+          <p class="b-card__txt">Как традиционно принимать масло тмина с мёдом, за что отвечает тимохинон и кому этот пряный концентрат противопоказан.</p>
+          <span class="b-card__more">Читать статью →</span>
+        </div>
+      </a>
+
+      <!-- Кластер 2 -->
+      <a href="../articles/tykvennoe-maslo-polza-dlya-zhkt-pecheni.html" class="b-card">
+        <div class="b-card__img-wrap">
+          <img src="../assets/pumpkin-oil-hero.jpg" alt="Тыквенное масло" class="b-card__img" width="600" height="338" loading="lazy">
+        </div>
+        <div class="b-card__body">
+          <div class="b-card__meta">
+            <span class="b-card__rubric">Вкус и кулинария</span>
+            <span class="b-card__time">6 мин</span>
+          </div>
+          <h2 class="b-card__h">Тыквенное масло холодного отжима: вкус, свойства и кулинарное применение</h2>
+          <p class="b-card__txt">Почему свежее тыквенное масло меняет цвет с зелёного на рубиновый (дихроматизм), природный цинк и как использовать его в крем-супах и салатах.</p>
+          <span class="b-card__more">Читать статью →</span>
+        </div>
+      </a>
+
+      <!-- Кластер 3 -->
+      <a href="../articles/syrodavlennoe-maslo-otlichie-ot-magazinnogo.html" class="b-card">
+        <div class="b-card__img-wrap">
+          <img src="../assets/raw-vs-store-hero.jpg" alt="Сыродавленное масло на гидравлическом прессе" class="b-card__img" width="600" height="338" loading="lazy">
+        </div>
+        <div class="b-card__body">
+          <div class="b-card__meta">
+            <span class="b-card__rubric">Инженерия отжима</span>
+            <span class="b-card__time">8 мин</span>
+          </div>
+          <h2 class="b-card__h">Сыродавленное масло против магазинного: в чём реальная разница технологий</h2>
+          <p class="b-card__txt">Чем бережный гидравлический отжим в капролоне отличается от промышленного шнека с нагревом семян. Калькулятор честной себестоимости ремесленного масла.</p>
+          <span class="b-card__more">Читать статью →</span>
+        </div>
+      </a>
+
+      <!-- Кластер 4 -->
+      <a href="../articles/lyanyanoe-maslo-bez-gorechi-omega-3.html" class="b-card">
+        <div class="b-card__img-wrap">
+          <img src="../assets/flaxseed-oil-hero.jpg" alt="Льняное масло без горечи" class="b-card__img" width="600" height="338" loading="lazy">
+        </div>
+        <div class="b-card__body">
+          <div class="b-card__meta">
+            <span class="b-card__rubric">Как выбрать и хранить</span>
+            <span class="b-card__time">6 мин</span>
+          </div>
+          <h2 class="b-card__h">Льняное масло без горечи: как правильно выбрать, хранить и использовать</h2>
+          <p class="b-card__txt">Свежее льняное масло имеет нежный ореховый вкус. Почему появляется горечь, чем отличается золотистый лён и как правильно хранить бутылку в холодильнике.</p>
+          <span class="b-card__more">Читать статью →</span>
+        </div>
+      </a>
+
+      <!-- Кластер 5 -->
+      <a href="../articles/kedrovoe-maslo-pervogo-otzhima-polza.html" class="b-card">
+        <div class="b-card__img-wrap">
+          <img src="../assets/cedar-oil-hero.jpg" alt="Кедровое масло первого отжима" class="b-card__img" width="600" height="338" loading="lazy">
+        </div>
+        <div class="b-card__body">
+          <div class="b-card__meta">
+            <span class="b-card__rubric">Таёжные деликатесы</span>
+            <span class="b-card__time">7 мин</span>
+          </div>
+          <h2 class="b-card__h">Кедровое масло первого отжима: вкус, свойства и как отличить настоящее</h2>
+          <p class="b-card__txt">Сливочный ореховый вкус, пиноленовая кислота и природный витамин E. Как отличить чистое масло из кедрового ядра от магазинного фальсификата.</p>
+          <span class="b-card__more">Читать статью →</span>
+        </div>
+      </a>
+
+      <!-- Кластер 6: Технология и оборудование -->
+      <a href="../articles/kaprolon-vs-dub-maslopress-tehnologiya.html" class="b-card">
+        <div class="b-card__img-wrap">
+          <img src="../assets/salagup-press-counter.jpg" alt="Маслопресс SALAGUP на прилавке мастерской Магия Масел" class="b-card__img" style="object-position: center 30%;" width="600" height="338" loading="lazy">
+        </div>
+        <div class="b-card__body">
+          <div class="b-card__meta">
+            <span class="b-card__rubric">Инженерия отжима</span>
+            <span class="b-card__time">9 мин</span>
+          </div>
+          <h2 class="b-card__h">Капролоновый бочонок или дубовая бочка: на чём отжимают живое масло без горечи</h2>
+          <p class="b-card__txt">Почему дуб накапливает окисленные жиры и портит вкус свежих семян. Физика пищевого капролона в стальной гильзе и закрытый капельник без контакта с воздухом.</p>
+          <span class="b-card__more">Читать статью →</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- CTA блок в стиле кость + янтарь -->
+    <div class="blog-cta">
+      <div class="blog-cta__text">
+        <h2>Попробуйте масло до того, как платить</h2>
+        <p>Приходите на Центральный рынок Калининграда: отожмём при вас, нальём в ложку, покажем семечку и пресс.</p>
+      </div>
+      <a href="../index.html#route" class="btn-yantar">Как нас найти на рынке</a>
+    </div>
+  </div>
+</main>
+
+<footer class="podval"><div class="wrap podval__in"><p class="podval__n">Магия Масел</p><div class="podval__f"><p>ИП Бродский Кирилл Львович, ОГРНИП 325774600761643</p><p>Калининград, улица Черняховского, 15–15а, Центральный рынок, павильон молочных продуктов</p><p><a href="tel:+79147585418">+7 914 758 54 18</a></p><p><a href="index.html">Блог</a> · <a href="../index.html#politika">Политика конфиденциальности</a></p><div class="soc-ryad"><a class="soc" href="https://t.me/magiya_masel_ru" rel="noopener me" target="_blank" aria-label="Telegram"><svg class="soc__z" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M21.2 4.1 2.9 11c-.7.3-.7 1.3.1 1.5l4.6 1.4 1.7 5.1c.2.7 1.1.8 1.5.3l2.4-2.4"/><path d="m21.2 4.1-3 15c-.1.6-.9.9-1.4.5l-5.6-4.1"/><path d="m7.6 13.9 13.6-9.8-8.4 11.4"/></svg></a><a class="soc" href="https://www.instagram.com/magiya_masla_ru/" rel="noopener me" target="_blank" aria-label="Instagram"><svg class="soc__z" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></a><span class="soc soc--bez" role="img" aria-label="Макс"><svg class="soc__z" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M20.4 12a8.4 8.4 0 1 0-14.7 5.5c.3.4.4.9.2 1.3l-.8 2.2c-.2.6.4 1.2 1 1l2.4-.9c.4-.2.9-.1 1.3.1A8.4 8.4 0 0 0 20.4 12Z"/><circle cx="12.4" cy="11.8" r="3.5"/></svg></span><span class="soc soc--bez" role="img" aria-label="ВКонтакте"><svg class="soc__z" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M7 9.3h1.7c.2 2.4 1.3 4 2.4 4.4V9.3h1.6v2.6c1.1-.1 2.2-1.4 2.6-2.6H17c-.3 1.5-1.3 2.7-2 3.2.7.4 1.9 1.5 2.4 3.2h-1.8c-.4-1.2-1.4-2.2-2.5-2.3v2.3h-.2C10.1 15.7 8 13.5 7 9.3Z"/></svg></span></div></div></div></footer>
+<script src="../assets/cookie.js" defer></script>
+</body></html>

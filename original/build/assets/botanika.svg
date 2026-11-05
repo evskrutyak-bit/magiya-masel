@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
+
+<!-- Своя ботаника тонкой линией. С этикеток клиента не берётся: решение владельца
+     13.09.2026 «из старого визуала берём только логотип». Приём с доски референсов
+     (HEDERA, TRAWA): контур в одну линию, без заливок, наследует currentColor. -->
+
+<symbol id="b-tykva" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 34c-16 0-27 13-27 31s11 31 27 31 27-13 27-31-11-31-27-31z"/>
+    <path d="M60 34c-9 8-9 54 0 62M60 34c9 8 9 54 0 62"/>
+    <path d="M44 40c-6 9-6 44 0 53M76 40c6 9 6 44 0 53"/>
+    <path d="M60 34c0-7-2-12-7-15M60 22c6-4 12-3 16 2"/>
+  </g>
+</symbol>
+
+<symbol id="b-len" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 106V52"/>
+    <path d="M60 52c-7-6-10-13-8-21 8 2 13 8 14 16M60 52c7-6 10-13 8-21-8 2-13 8-14 16"/>
+    <path d="M60 47c-9-2-14-8-14-17 9 1 15 7 16 15M60 47c9-2 14-8 14-17-9 1-15 7-16 15"/>
+    <circle cx="60" cy="47" r="4"/>
+    <path d="M60 72c-8 0-13 4-16 11M60 86c8 0 13 4 16 11"/>
+  </g>
+</symbol>
+
+<symbol id="b-tmin" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 106V58"/>
+    <path d="M60 58 34 34M60 58l26-24M60 58V26M60 58 44 30M60 58l16-28"/>
+    <path d="M30 30c2-4 6-6 9-4M84 30c-2-4-6-6-9-4M56 22c2-4 6-5 9-3M40 26c2-4 6-5 9-3M71 26c-2-4-6-5-9-3"/>
+    <path d="M60 78c-9 1-15 6-19 14M60 90c9 0 15 4 19 11"/>
+  </g>
+</symbol>
+
+<symbol id="b-rastoropsha" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 108V60"/>
+    <path d="M46 52c0-9 6-16 14-16s14 7 14 16c0 6-6 10-14 10s-14-4-14-10z"/>
+    <path d="M52 36c-2-8 1-14 8-18 7 4 10 10 8 18M60 18v-6"/>
+    <path d="M50 30c-5-5-6-11-3-17M70 30c5-5 6-11 3-17"/>
+    <path d="M60 74c-10-1-17 4-21 13 9 3 17 0 21-7M60 88c10-1 17 3 21 12-9 3-17 0-21-7"/>
+  </g>
+</symbol>
+
+<symbol id="b-kedr" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 26c-13 10-20 26-20 44 0 14 9 24 20 24s20-10 20-24c0-18-7-34-20-44z"/>
+    <path d="M44 52h32M42 66h36M44 80h32"/>
+    <path d="M60 26v68"/>
+    <path d="M52 40c3 5 3 9 0 14M68 40c-3 5-3 9 0 14M52 68c3 5 3 9 0 14M68 68c-3 5-3 9 0 14"/>
+  </g>
+</symbol>
+
+<symbol id="b-oreh" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="62" r="32"/>
+    <path d="M60 30v64"/>
+    <path d="M60 44c-9 2-14 9-14 18s5 16 14 18M60 44c9 2 14 9 14 18s-5 16-14 18"/>
+    <path d="M46 54c-5 3-8 8-8 14M74 54c5 3 8 8 8 14"/>
+    <path d="M60 30c2-8 8-12 16-12"/>
+  </g>
+</symbol>
+
+<symbol id="b-podsolnuh" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="48" r="15"/>
+    <path d="M60 33V18M60 63v15M45 48H30M75 48h15M49 37 38 26M71 37l11-11M49 59 38 70M71 59l11 11"/>
+    <path d="M60 78v30"/>
+    <path d="M60 88c-9-2-15 1-19 9 8 4 15 2 19-4M60 98c9-2 15 1 19 9-8 4-15 2-19-4"/>
+  </g>
+</symbol>
+
+<symbol id="b-kunzhut" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 104V44"/>
+    <path d="M60 44c-11 0-18 9-18 22s7 26 18 26 18-13 18-26-7-22-18-22z"/>
+    <path d="M60 44v48M49 60h22M47 74h26"/>
+    <path d="M60 44c0-8 4-14 11-17"/>
+    <path d="M42 52c-6-2-10-7-11-14M78 52c6-2 10-7 11-14"/>
+  </g>
+</symbol>
+
+<symbol id="b-list" viewBox="0 0 120 120">
+  <g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M60 100C36 88 24 68 26 40c28-4 48 8 56 34 3 10 2 18-2 26"/>
+    <path d="M26 40c18 12 30 30 34 60"/>
+    <path d="M38 46c6 8 10 14 13 21M48 58c6 9 9 16 11 24"/>
+  </g>
+</symbol>
+
+</defs></svg>

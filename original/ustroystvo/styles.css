@@ -1,0 +1,675 @@
+/* Шрифты подключаются вторым <link> в <head>, не @import отсюда.
+ * Замер 18.09.2026: при @import браузер не начинал запрос fonts.css, пока
+ * не скачает целиком этот файл (51 КБ) — +650 мс до старта шрифтов на слабой
+ * сети, и единственный сдвиг вёрстки страницы приходился на окно их доезда.
+ * Файл шрифтов теперь свой: ../assets/fonts/fonts.css (четыре семейства вместо семи).
+ *
+ * ⛔ Производные цвета записаны `rgb(from var(--X) r g b / .N)`, а НЕ через color-mix.
+ *    Измерено 18.09.2026: color-mix смешивает в premultiplied-пространстве и округляет
+ *    иначе — на градиентах мглы это дало 6,4%% различающихся пикселей фото при нулевом
+ *    различии текста. Глазами не видно, но структурная правка обязана давать ноль.
+ */
+
+/* ═══ КРУГ УСТРОЙСТВА · «Магия Масел» ═════════════════════════════════════════
+   Третий заход. Первые два дали перекрас: цвет и шрифт менялись, устройство
+   оставалось прежним, и владелец увидел «просто квадраты».
+
+   ⛔ Почему полосы прошлого круга не работали — замерено, не предположено.
+   Заливок во всю ширину там было 7, но отличались они от холста на 1,08–1,21:1
+   при пороге различимости 1,25. На тёмном фоне разница яркостей ничтожна:
+   между #15180F и #1C2115 глаз не видит границы. Полоса была в коде и не было
+   её на экране.
+
+   Отсюда правило этой страницы: полоса делит страницу, только если её заливка
+   ОТЛИЧАЕТСЯ ОТ ХОЛСТА В РАЗЫ. Поверхностей четыре и они далеко друг от друга:
+     ночь #10130C  →  олива #2B3420 (1,44:1)  →  янтарь #E5A33C  →  кость #F1EEE2
+   Светлая плита посреди тёмной страницы — это разрез, а не оттенок.        */
+
+:root{
+  --noch:#10130C;     /* холст страницы */
+  --oliva:#2B3420;    /* полоса-раздел, 1,44:1 к холсту */
+  --yantar:#E5A33C;   /* полоса действия и сам цвет действия */
+  --kost:#F1EEE2;     /* светлая плита — разрез в тёмной странице */
+
+  --tekst:#F1EEE2;    /* текст на тёмном */
+  --tekst-2:#ADA890;  /* вторичный на тёмном */
+  --na-kosti:#1A1E12; /* текст на светлой плите */
+  --na-kosti-2:#5B5A4A;
+  --na-yantare:#1A1208;
+  /* производная от --kost, НЕ копия: держит 15 линий на тёмном.
+     Была литералом rgba(241,238,226,.20) — смена палитры её не трогала,
+     и ни один прибор этого не показал бы: слова `border` нет ни в одном
+     скрипте tools/. Найдено аудитом 18.09.2026. */
+  --liniya:rgb(from var(--kost) r g b / .2);
+
+  /* ═══ ЧЕТЫРЕ РОЛИ, КОТОРЫХ НЕ БЫЛО · заведены 17.09.2026 ═══════════════════
+     Основание — замер на стенде `test-21st-2026-09-17/`: смена ИМЁН токенов
+     дала 0 правок из 20, введение этих ролей — 20 из 20. Полный разбор:
+     `_обмен/ОТ-MASLA-SAYT-2026-09-17-test-21st-rezultat.md`.
+     ⛔ Значения равны прежним зашитым: правка структурная, вид не меняется —
+     сверено попиксельно снимками до и после на 1440 и 375.
+
+     Принцип: у КАЖДОЙ поверхности свой текстовый токен. Поверхностей пять —
+     холст, плита-кость, полоса-олива, акцент-янтарь и кадр под текстом. */
+
+  /* РОЛЬ 1 · кадр как поверхность. Мгла держится компонентами, чтобы одно
+     значение задавало все пять ступеней градиента, а не пять чисел подряд */
+  /* Мгла кадра считается от --noch напрямую (см. .kadr__mgla ниже).
+     Прежде здесь стоял --kadr-mgla-rgb:16 19 12 — те же каналы, что у --noch,
+     но записанные ТРОЙКОЙ, а не hex: замена палитры поиском по `#` промахнулась
+     бы по нему гарантированно, а не по невнимательности. Аудит 18.09.2026. */
+  --na-kadre:#F1EEE2;      /* текст поверх кадра — НЕ то же, что текст на холсте */
+  --na-kadre-2:#ADA890;
+  --kadr-chip:rgb(from var(--noch) r g b / .88);   /* плашка подписи на кадре */
+
+  /* РОЛЬ 2 · акцент БУКВАМИ. На тёмном холсте совпадает с заливкой, на светлой
+     палитре расходится: красный и глина дают 3,8 буквами при норме 4,5 */
+  --yantar-tekst:#E5A33C;
+
+  /* РОЛЬ 5 · акцент ЛИНИЕЙ. Заведена 18.09.2026 по находке аудита: три места
+     (граница шага, линия таблицы, подчёркивание поля в фокусе) красились
+     заливочным --yantar, хотя это ни заливка, ни буквы. На светлой палитре
+     линия и заливка расходятся: заливке нужна плотность, линии — различимость.
+     Значение пока равно заливочному — вид не меняется. */
+  --yantar-liniya:#E5A33C;
+
+  /* РОЛЬ 3 · бирка на акцентной ЗАЛИВКЕ. Тёмной нормы не взять никаким
+     оттенком — на светлой палитре роль переворачивается в белую */
+  /* производная от --na-yantare. ⚠️ На СВЕТЛОЙ палитре роль переворачивается
+     в белую — тогда эта строка переписывается целиком, а не правится долей. */
+  --na-yantare-2:rgb(from var(--na-yantare) r g b / .72);
+
+  /* РОЛЬ 4 · полоса-раздел как поверхность. Прежде текст на ней наследовал
+     общий и мерился от холста — прибор ловил 4,15 при норме 4,5 */
+  --na-olive:#F1EEE2;
+  --na-olive-2:#ADA890;
+
+  /* производная от --na-kosti, НЕ копия — то же основание, что у --liniya */
+  --liniya-na-kosti:rgb(from var(--na-kosti) r g b / .18);
+
+  /* три гарнитуры плюс моно: пара несёт характер, бирки — отдельный голос */
+  --displey:'Unbounded', ui-sans-serif, system-ui, sans-serif;   /* заголовки 70–90 px */
+  --antikva:'Cormorant Garamond', Georgia, serif;                /* развороты и просьбы */
+  --telo:'Onest', ui-sans-serif, system-ui, sans-serif;          /* тело и интерфейс */
+  --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;       /* бирки и номера */
+
+  --s4:4px; --s8:8px; --s12:12px; --s16:16px; --s20:20px; --s24:24px;
+  --s32:32px; --s40:40px; --s56:56px; --s80:80px; --s120:120px; --s160:160px;
+  --page:1280px;
+  --shapka:96px;   /* высота липкой шапки; держит scroll-margin-top якорей */
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{overflow-x:clip}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--noch); color:var(--tekst);
+  font-family:var(--telo); font-size:17px; line-height:1.5; letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+.wrap{width:100%;max-width:var(--page);margin:0 auto;padding:0 var(--s40)}
+
+/* ── бирка: моноширинная капитель, «музейный ярлык» ── */
+.birka{
+  font-family:var(--mono); font-size:12px; font-weight:400; line-height:1.4;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--tekst-2); margin:0;
+}
+.nomer{
+  font-family:var(--mono); font-size:13px; letter-spacing:.1em; color:var(--yantar-tekst);
+  display:block;
+}
+.nomer--krupno{
+  font-family:var(--displey); font-size:clamp(40px,4.6vw,72px); line-height:.85;
+  letter-spacing:-.03em; color:var(--yantar-tekst);
+}
+
+/* ── заголовки: 70–90 px, межстрочный 0,85, буквы почти касаются ── */
+h1{
+  font-family:var(--displey); font-weight:400; font-size:clamp(40px,7.2vw,92px);
+  line-height:.85; letter-spacing:-.035em; margin:0; max-width:15ch;
+}
+h2{
+  font-family:var(--displey); font-weight:400; font-size:clamp(34px,5.2vw,74px);
+  line-height:.85; letter-spacing:-.032em; margin:0 0 var(--s24); max-width:17ch;
+}
+h3{font-family:var(--telo);font-weight:600;font-size:22px;line-height:1.15;margin:0}
+.vvod{font-size:21px;line-height:1.35;margin:0 0 var(--s24);max-width:46ch;color:var(--tekst)}
+.tekst p{margin:0 0 var(--s16);max-width:62ch}
+.tekst p:last-child{margin-bottom:0}
+.tekst--uzko{max-width:54ch}
+.hvost{margin:var(--s24) 0 0;color:var(--tekst-2);max-width:62ch}
+.podzag{font-family:var(--displey);font-weight:400;font-size:clamp(26px,3vw,44px);
+  line-height:.9;letter-spacing:-.02em;margin:var(--s120) 0 var(--s32)}
+
+/* ── действие ── */
+.knopka{
+  display:inline-block; background:var(--yantar); color:var(--na-yantare);
+  border:0; border-radius:999px; font-family:var(--telo); font-weight:600;
+  font-size:17px; line-height:1.2; padding:17px var(--s32); text-decoration:none;
+}
+.knopka:hover{background:var(--kost)}
+.knopka--noch{background:var(--noch);color:var(--yantar-tekst)}
+.knopka--noch:hover{background:var(--kost);color:var(--na-kosti)}
+.strelka{font-weight:600;font-size:17px;text-decoration:none;white-space:nowrap;
+  border-bottom:1px solid currentColor;padding-bottom:2px}
+.strelka--noch{color:var(--na-yantare)}
+.dejstvie{display:flex;align-items:center;gap:var(--s32);flex-wrap:wrap;margin-top:var(--s32)}
+
+/* ── шапка ── */
+/* Шапка ЛИПКАЯ — решение владельца 17.09.2026. Непрозрачный фон обязателен:
+   под ней проезжают и светлые плиты, и кадры. Линия снизу отделяет её от
+   светлых секций, на тёмных почти не видна и не мешает.
+   ⚠️ Липкая шапка уводит цель якоря под себя — поэтому ниже у всех целей
+   стоит scroll-margin-top на её высоту. */
+.hdr{position:sticky;top:0;z-index:20;background:var(--noch);
+  border-bottom:1px solid var(--liniya)}
+.hdr__in{display:flex;align-items:center;gap:var(--s32);padding-top:var(--s20);padding-bottom:var(--s20)}
+/* Знак слева, текстовый бренд справа — раздел 6 производственных правил:
+   flex по центру, знак 48 px (мельче 48 теряется). */
+.brand{display:flex;flex-direction:row;align-items:center;gap:14px;
+  text-decoration:none;flex:0 0 auto;min-width:0}
+.brand__znak{width:48px;height:48px;flex:0 0 auto;color:var(--yantar-tekst);display:block}  /* роль 2: графика на холсте, не заливка. Было --yantar (заливочный) */
+.brand__t{display:flex;flex-direction:column;min-width:0}
+.brand__n{font-family:var(--displey);font-size:22px;line-height:1;letter-spacing:-.03em}
+.brand__s{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--tekst-2);margin-top:5px}
+.nav{display:flex;gap:var(--s24);margin-left:auto}
+.nav a{font-family:var(--mono);font-size:18px;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;color:var(--tekst-2)}
+.nav a:hover{color:var(--yantar-tekst)}
+.hdr__act{display:flex;align-items:center;gap:var(--s20);flex:0 0 auto}
+.tel{font-weight:600;font-size:17px;text-decoration:none;white-space:nowrap}
+
+/* ⛔ Липкая шапка накрывает цель якоря: переход по «Ценам» ставит заголовок
+   ПОД шапку. Лечится не отступом секции, а scroll-margin-top у самой цели. */
+[id]{scroll-margin-top:calc(var(--shapka) + 16px)}
+.birka--adres{max-width:52ch;color:var(--tekst-2);letter-spacing:.08em;line-height:1.6}
+
+/* ═══ ПОЛОСЫ ВО ВСЮ ШИРИНУ ═════════════════════════════════════════════════ */
+.polosa{padding:var(--s120) 0}
+.polosa--yantar{background:var(--yantar);color:var(--na-yantare)}
+.polosa--yantar .birka{color:var(--na-yantare-2)}
+.polosa--yantar .nomer{color:var(--na-yantare-2)}
+.polosa--oliva{background:var(--oliva);color:var(--na-olive)}
+.polosa--oliva .birka{color:var(--na-olive-2)}
+.polosa--kost{background:var(--kost);color:var(--na-kosti)}
+.polosa--kost .birka{color:var(--na-kosti-2)}
+.polosa--kost .vvod{color:var(--na-kosti)}
+.polosa--kost .hvost{color:var(--na-kosti-2)}
+/* Олива как поверхность — роль 4. Прежде текст на ней наследовал токены ХОЛСТА:
+   .vvod и .hvost держат собственный color, и наследование от полосы его не
+   перебивает. Для кости переопределение было, для оливы — нет. Значения равны
+   прежним вычисленным, вид не меняется; расходятся при смене палитры. Аудит 18.09.2026 */
+.polosa--oliva .vvod{color:var(--na-olive)}
+.polosa--oliva .hvost{color:var(--na-olive-2)}
+.polosa--oliva .fakt p{color:var(--na-olive-2)}
+
+/* Л1 · три проверки со ступенчатым смещением */
+.proverki{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,4fr) minmax(0,5fr);
+  gap:var(--s40);margin-top:var(--s56);align-items:start}
+.proverka p{margin:var(--s12) 0 0;font-family:var(--displey);font-weight:400;
+  font-size:clamp(22px,2.4vw,36px);line-height:.95;letter-spacing:-.025em}
+/* ⚠️ Ступени укорочены после прогона высот: прибор дал 0,86 при норме 0,85.
+   Дефекта не было — выше на десктопе оказались ровно те секции, где блоки
+   смещены нарочно. Но 120–160 px пустого поля сверху это не асимметрия,
+   а дыра: приём читается и на 40–80. Страница стала компактнее, прибор чист. */
+.proverki > :nth-child(2){margin-top:var(--s32)}
+.proverki > :nth-child(3){margin-top:var(--s80)}
+
+/* ═══ СЕКЦИИ НА ХОЛСТЕ ═════════════════════════════════════════════════════ */
+.sek{padding:var(--s160) 0}
+.shapka{max-width:900px;margin-bottom:var(--s80)}
+.shapka--uzko{max-width:720px}
+
+/* 40/60 с кадром, уходящим за край окна */
+/* ⚠️ было align-items:start — под коротким текстом левой колонки оставалась
+   пустота почти в пол-экрана: правая колонка вдвое выше. Это читается дырой,
+   а не асимметрией. Выравниваем по центру и укорачиваем второй кадр. */
+.sek__setka{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr);
+  gap:var(--s80);align-items:center}
+.sek__uzkaya{min-width:0}
+.sek__shirokaya{min-width:0}
+.plita{margin:0;overflow:hidden}
+.plita img{width:100%;height:100%;object-fit:cover}
+.para{display:grid;gap:var(--s24)}
+.para .plita img{aspect-ratio:4/3}
+/* второй кадр уходит за правый край окна — тот же приём, что в S7:
+   кадр перестаёт быть картинкой сбоку и становится героем полосы */
+.plita--sdvig{margin-top:var(--s32);margin-left:var(--s80);margin-right:calc(50% - 50vw)}
+.plita--sdvig img{aspect-ratio:1/1}
+/* кадр выходит за правый край окна: приём «ничего не привязано к сетке» */
+.sek--kadr-vpravo .plita--za-kray{margin-right:calc(50% - 50vw);width:auto}
+.sek--kadr-vpravo .plita--za-kray img{aspect-ratio:4/3}
+.sek--kadr-vpravo .sek__setka{align-items:start}
+
+/* S4 · кадр держит секцию целиком */
+/* ⚠️ Кадр 825×1100 в боксе 1440×809 — срез по высоте 58%. При фокусе по центру
+   за нижней кромкой оставались струя и мерный стакан, то есть ровно то, о чём
+   секция: «масло течёт из-под пресса». Фокус опущен к стакану. */
+
+/* ═══ S4 · УСТРОЙСТВО Б3 · шаг со своим кадром ═════════════════════════════
+   Принято владельцем 17.09.2026. Прежнее — список поверх кадра-фона — шаги
+   не разделяло: четыре строки читались одним абзацем.
+   ⚠️ Кадров три, а шагов четыре. Четвёртый идёт текстом: снимка даты на
+   бутылке не существует, а подставить бутылку без даты значило бы выдать
+   за готовое то, чего нет. Это не дыра в вёрстке, а состояние материала. */
+.shagi-kadry{list-style:none;margin:var(--s56) 0 0;padding:0}
+.shag-k{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);
+  gap:var(--s56);align-items:center;padding:var(--s40) 0;
+  border-top:1px solid var(--liniya)}
+.shag-k--sprava{grid-template-columns:minmax(0,1fr) minmax(0,340px)}
+.shag-k--sprava .shag-k__kadr{order:2}
+.shag-k--sprava .shag-k__slovo{order:1}
+.shag-k--bez{grid-template-columns:1fr}
+.shag-k__kadr{margin:0;overflow:hidden}
+.shag-k__kadr img{width:100%;height:300px;object-fit:cover;object-position:50% 45%}
+/* Номер вынесен из абзаца в бейдж ВМЕСТЕ С ТОЧКОЙ: «1.» — иначе видимый
+   текст страницы расходится с принятым на один знак. */
+.shag-k__n{display:inline-grid;place-items:center;width:38px;height:38px;
+  border-radius:50%;border:1px solid var(--yantar-liniya);color:var(--yantar-tekst);
+  font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:var(--s16)}
+.shag-k__slovo p{margin:0;font-family:var(--displey);font-weight:400;
+  font-size:clamp(20px,2.2vw,30px);line-height:1.15;letter-spacing:-.02em}
+
+/* ═══ РАЗВОРОТ · кадр за краем окна, текст рядом ═══════════════════════════ */
+/* align-items:stretch, а не center: иначе кадр висит посреди плиты
+   с кремовыми полями сверху и снизу, и «плита во всю ширину» перестаёт
+   читаться плитой. Кадр обязан закрывать свою половину целиком. */
+.razvorot{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);
+  gap:var(--s80);align-items:stretch;padding:0}
+.razvorot__kadr{margin:0;position:relative}
+.razvorot__kadr img{width:100%;height:100%;object-fit:cover;min-height:640px}
+/* ⛔ было 3,19:1 — светлый текст с тенью поверх песчаной стены. Тень контраст
+   не держит: прибор меряет фон под буквами, а он там светлый. Подпись села
+   на тёмный чип — это тот же музейный ярлык, что и по всей странице. */
+/* ⛔ Специфичность: `.polosa--kost .birka` (0,2,0) перебивала
+   `.razvorot__kadr figcaption` (0,1,1), и подпись красилась тёмным по тёмному
+   чипу — 2,36:1 на десктопе и 1:1 на телефоне, то есть невидима совсем.
+   Селектор поднят до (0,3,1). Первый раз я «починил» это, добавив чип, и
+   сделал хуже: лечил фон, а виноват был цвет текста. */
+.polosa--kost .razvorot__kadr figcaption{position:absolute;left:var(--s24);bottom:var(--s20);
+  color:var(--na-kadre);background:var(--kadr-chip);padding:8px 12px;z-index:2}
+.razvorot__tekst{padding:var(--s120) var(--s40) var(--s120) 0;min-width:0;max-width:720px}
+.razvorot--uzhe{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.razvorot--uzhe .razvorot__kadr img{min-height:560px}
+/* врезка антиквой — вторая гарнитура несёт характер разворота */
+.vydel{font-family:var(--antikva);font-weight:400;font-size:clamp(26px,3vw,40px);
+  line-height:1.1;letter-spacing:-.01em;margin:0 0 var(--s32);max-width:22ch}
+.podpis{margin:var(--s40) 0 0;display:flex;flex-direction:column;gap:var(--s8)}
+.podpis b{font-size:20px;font-weight:600}
+
+/* ═══ Л2 · узкая строка ════════════════════════════════════════════════════ */
+.stroka{border-top:1px solid var(--liniya);border-bottom:1px solid var(--liniya)}
+.stroka__in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--s56);
+  align-items:center;padding-top:var(--s32);padding-bottom:var(--s32)}
+.stroka__f p{margin:0 0 var(--s8);font-size:16px}
+.stroka__f p:last-child{margin-bottom:0}
+.stroka .birka{white-space:nowrap}
+
+/* ═══ S5 · лестница ступеней ═══════════════════════════════════════════════ */
+.lestnica{display:grid;gap:0;border-top:1px solid var(--liniya)}
+.shag{border-bottom:1px solid var(--liniya)}
+.shag summary{list-style:none;cursor:pointer;display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;gap:var(--s40);align-items:center;
+  padding:var(--s32) 0}
+.shag summary::-webkit-details-marker{display:none}
+.shag__t{font-family:var(--displey);font-weight:400;font-size:clamp(22px,2.6vw,40px);
+  line-height:.9;letter-spacing:-.025em}
+.shag__znak{width:22px;height:22px;position:relative}
+.shag__znak::before,.shag__znak::after{content:"";position:absolute;inset:0;margin:auto;
+  background:var(--yantar)}
+.shag__znak::before{width:22px;height:2px}
+.shag__znak::after{width:2px;height:22px}
+/* Знак раскрытия общий у ступеней истории (.shag) и вопросов (.vopros), а
+   состояние [open] было описано ТОЛЬКО для .shag: восемь вопросов из восьми
+   показывали плюс в раскрытом виде. Найдено аудитом 18.09.2026. */
+.shag[open] .shag__znak::after,
+.vopros[open] .shag__znak::after{display:none}
+.shag__telo{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s56);
+  padding:0 0 var(--s56)}
+.shag__telo .plita img{aspect-ratio:1/1}
+
+/* подпись под рисунком: описание прозой, под ним бирка происхождения.
+   ⛔ Ярлык обязателен — рисунки сделаны для страницы по словесному описанию
+   устройства, исторических изображений по этим сюжетам в свободном доступе нет.
+   Биркой, а не прозой: одна фраза под четырьмя кадрами подряд читается
+   оговоркой-рефреном (voice-base §13), повтор ярлыка читается ярлыком.
+   Цвет бирки на оливе задаёт `.polosa--oliva .birka` (0,2,0) — здесь его
+   намеренно не перебиваем, иначе тёмное по тёмному, как было у разворота. */
+.risunok{margin:0;min-width:0}
+.risunok__p{margin:var(--s16) 0 0;font-size:15px;line-height:1.5;max-width:44ch}
+.risunok__yarlyk{display:block;margin-top:var(--s8)}
+
+/* ═══ S6 · разбросанный кластер просьб ═════════════════════════════════════ */
+.klaster{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--s40) var(--s32)}
+.prosba{min-width:0}
+.prosba h3{font-family:var(--antikva);font-weight:400;font-size:clamp(28px,3.6vw,54px);
+  line-height:.95;letter-spacing:-.015em}
+.prosba p{margin:var(--s12) 0 0;color:var(--tekst-2);max-width:34ch}
+.klaster > :nth-child(1){grid-column:1 / span 6}
+.klaster > :nth-child(2){grid-column:8 / span 5;margin-top:var(--s32)}
+.klaster > :nth-child(3){grid-column:2 / span 5;margin-top:var(--s24)}
+.klaster > :nth-child(4){grid-column:8 / span 5}
+
+/* ═══ S7 · факты ═══════════════════════════════════════════════════════════ */
+.fakty{display:grid;gap:var(--s24);margin-top:var(--s32)}
+.fakt{border-top:1px solid var(--liniya);padding-top:var(--s16)}
+.fakt b{display:block;font-size:19px;font-weight:600}
+.fakt p{margin:var(--s8) 0 0;color:var(--tekst-2)}
+
+/* ═══ S8 · ряды применения ═════════════════════════════════════════════════ */
+/* ⛔ было grid в две колонки: строки общие, и короткий пункт справа
+   растягивался под длинный слева — между «Расторопшей» и «Льняным»
+   зияла дыра. Многоколоночный поток колонки не связывает. */
+.ryady{columns:2;column-gap:var(--s40);margin-top:var(--s32)}
+.ryad{break-inside:avoid}
+.ryad{display:flex;gap:var(--s12);flex-wrap:wrap;align-items:baseline;
+  border-bottom:1px solid var(--liniya-na-kosti);padding:var(--s12) 0}
+.ryad b{font-size:18px;font-weight:600;flex:0 0 auto}
+.ryad p{margin:0;color:var(--na-kosti-2)}
+.cena{margin:0 0 var(--s20);font-size:19px;font-weight:600;color:var(--yantar-tekst)}
+.nb{white-space:nowrap}
+
+/* ═══ таблица ══════════════════════════════════════════════════════════════ */
+
+/* ═══ закрытие ═════════════════════════════════════════════════════════════ */
+.zakrytie{padding:var(--s120) 0}
+.zakrytie__in{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);
+  gap:var(--s56);align-items:end}
+/* ⚠️ Здесь h2 тянулся на обе колонки, и блок содержания падал в первую
+   колонку следующего ряда: правая половина экрана пустовала. Заголовок
+   по-прежнему во всю ширину — ему нужен размах, — а содержание уходит
+   в правую колонку. Это и есть та асимметрия, ради которой всё затевалось. */
+.zakrytie__n{font-family:var(--displey);font-weight:400;font-size:clamp(44px,7vw,104px);
+  line-height:.85;letter-spacing:-.035em;margin:0 0 var(--s40);grid-column:1/-1}
+.zakrytie__pravo{grid-column:2 / -1}
+.zakrytie__a{margin:0;font-size:18px;line-height:1.5;max-width:44ch}
+.zakrytie .dejstvie{margin-top:0;justify-content:flex-end}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ПРЕЖНЯЯ РЕДАКЦИЯ УСТРОЙСТВА — А0, В0, Г0. Возвращена 17.09.2026 вечером:
+   владелец пересмотрел блоки ПО СНИМКАМ и выбрал прежний вид у трёх из
+   четырёх. Днём эти правила удалялись как мёртвые — тогда они и были
+   мёртвыми. Оба устройства теперь живут рядом, выбор редакции делает
+   переменная USTROYSTVO в билдере.
+   ═══════════════════════════════════════════════════════════════════════ */
+/* ═══ S1 · кадр во весь экран, заголовок прямо на нём ═══════════════════════ */
+.ekran{position:relative;min-height:92vh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:var(--s80) 0 var(--s56);overflow:hidden}
+.ekran__kadr{position:absolute;inset:0}
+.ekran__kadr picture,.ekran__kadr img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:56% 24%}
+.ekran__mgla{position:absolute;inset:0;
+  background:linear-gradient(to top,
+    rgb(from var(--noch) r g b / .94) 0%,  rgb(from var(--noch) r g b / .78) 32%,
+    rgb(from var(--noch) r g b / .3) 62%, rgb(from var(--noch) r g b / .06) 100%)}
+.ekran__in{position:relative;color:var(--na-kadre)}
+.ekran .birka--adres{color:var(--na-kadre-2)}
+/* ⛔ .vvod держит собственный color:var(--tekst) — наследование его не
+   перебивает, роль приходится назначать адресно. */
+.ekran .vvod{color:var(--na-kadre)}
+.ekran__niz{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr);
+  gap:var(--s56);align-items:end;margin-top:var(--s40)}
+.ekran .vvod{margin:0}
+.birka--adres{max-width:52ch;color:var(--tekst-2);letter-spacing:.08em;line-height:1.6}
+
+/* ═══ S9 · товары ══════════════════════════════════════════════════════════ */
+.tovary{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr) minmax(0,5fr);
+  gap:var(--s40);align-items:start}
+.tovar{min-width:0}
+.tovar .plita img{aspect-ratio:4/5;object-position:center 46%}
+.tovary > :nth-child(2){margin-top:var(--s40)}
+.tovary > :nth-child(3){margin-top:var(--s80)}
+.tovar h3{font-family:var(--displey);font-weight:400;font-size:clamp(24px,2.4vw,34px);
+  line-height:.95;letter-spacing:-.025em;margin:var(--s24) 0 var(--s8)}
+.cena{margin:0 0 var(--s20);font-size:19px;font-weight:600;color:var(--yantar-tekst)}
+.nb{white-space:nowrap}
+.tovar dl{margin:0;border-top:1px solid var(--liniya);padding-top:var(--s16)}
+.tovar dt{margin-top:var(--s16)}
+.tovar dt:first-child{margin-top:0}
+.tovar dd{margin:var(--s4) 0 0;color:var(--tekst-2);font-size:16px;line-height:1.5}
+.butyli{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--s24)}
+.butyl{margin:0;min-width:0}
+.butyl .plita img{aspect-ratio:4/5;object-position:center 46%}
+.butyl figcaption{margin-top:var(--s12)}
+
+/* ═══ таблица ══════════════════════════════════════════════════════════════ */
+.podskazka{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--tekst-2);margin:var(--s120) 0 var(--s12);display:none}
+.tablica{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  margin-top:var(--s120);border-top:1px solid var(--yantar-liniya)}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:16px}
+th{font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--tekst-2);text-align:left;
+  padding:var(--s20) var(--s24) var(--s12) 0;vertical-align:bottom}
+td{padding:var(--s20) var(--s24) var(--s20) 0;border-top:1px solid var(--liniya);
+  vertical-align:top;line-height:1.5}
+th:nth-child(4),th:nth-child(5),td:nth-child(4),td:nth-child(5){white-space:nowrap}
+th:last-child,td:last-child{padding-right:0}
+
+/* ═══ планшет ══════════════════════════════════════════════════════════════ */
+
+/* ═══ телефон ══════════════════════════════════════════════════════════════ */
+
+/* ═══ ДОБОР S10–S15 · те же приёмы, что и выше ═════════════════════════════ */
+
+/* S11 · секция без кадра: держит одна типографика */
+.sek--schyot .sek__setka{align-items:start}
+/* ⚠️ было max-width:34ch — на десктопе текст не использовал свою колонку и
+   секция росла вверх: прибор высот дал ×1,31 при пороге 1,30. Мера расширена
+   до 46ch, это по-прежнему комфортная строка на кегле 28. */
+.tekst--krupno p{font-size:clamp(20px,2vw,28px);line-height:1.35;max-width:46ch;margin-bottom:var(--s24)}
+.chislo{color:var(--yantar-tekst);white-space:nowrap}
+.sovet{margin:var(--s32) 0 0;font-family:var(--antikva);font-weight:400;
+  font-size:clamp(26px,3vw,42px);line-height:1.05;letter-spacing:-.015em;color:var(--yantar-tekst);
+  max-width:26ch}
+
+/* S12 · перечень противопоказаний.
+   ⛔ Правовая рамка: обычный текст, ни крестов, ни плашек, ни аптечных знаков.
+   Вид не должен читаться показаниями — только волосяная линия между строками. */
+.perechen{list-style:none;margin:0;padding:0;columns:2;column-gap:var(--s80)}
+.perechen li{break-inside:avoid;padding:var(--s16) 0;
+  border-bottom:1px solid var(--liniya-na-kosti);font-size:18px;line-height:1.45}
+.polosa--kost .perechen li:first-child{border-top:1px solid var(--liniya-na-kosti)}
+
+/* S13 · форма */
+.sek--40-60 .sek__shirokaya h3{font-family:var(--displey);font-weight:400;
+  font-size:clamp(24px,2.4vw,34px);line-height:.95;letter-spacing:-.025em;margin:0 0 var(--s16)}
+.forma__vvod{margin:0 0 var(--s32);color:var(--tekst-2);max-width:52ch}
+.forma{display:grid;gap:var(--s20);max-width:560px}
+.pole{margin:0;display:grid;gap:var(--s8)}
+.pole label{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tekst-2)}
+.forma input[type=text],.forma textarea{
+  font-family:var(--telo); font-size:17px; color:var(--tekst);
+  background:transparent; border:0; border-bottom:1px solid var(--liniya);
+  padding:10px 0; width:100%; border-radius:0;
+}
+.forma input[type=text]:focus,.forma textarea:focus{outline:none;border-bottom-color:var(--yantar-liniya)}
+.forma textarea{resize:vertical;min-height:84px}
+.forma__soglasie{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--s12);
+  align-items:start;font-size:16px;line-height:1.45;color:var(--tekst-2);cursor:pointer}
+.forma__soglasie input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--yantar)}
+.forma__soglasie a{color:var(--tekst)}
+.forma .knopka{justify-self:start;margin-top:var(--s8)}
+.forma__otvet{margin:0;color:var(--yantar-tekst);font-size:16px}
+
+/* S14 · вопросы той же лестницей, что история, но без номеров */
+.vopros{border-bottom:1px solid var(--liniya)}
+.lestnica .vopros:first-child{border-top:0}
+.vopros summary{list-style:none;cursor:pointer;display:grid;
+  grid-template-columns:minmax(0,1fr) auto;gap:var(--s40);align-items:center;padding:var(--s24) 0}
+.vopros summary::-webkit-details-marker{display:none}
+.vopros__t{font-family:var(--displey);font-weight:400;font-size:clamp(19px,2.1vw,30px);
+  line-height:.95;letter-spacing:-.022em}
+.vopros__telo{padding:0 0 var(--s32);max-width:72ch}
+
+/* S15 · закрытие настоящим текстом раздела */
+.zakrytie__in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+  gap:var(--s56);align-items:start}
+.zakrytie__n{font-family:var(--displey);font-weight:400;font-size:clamp(44px,7vw,104px);
+  line-height:.85;letter-spacing:-.035em;margin:0;max-width:none}
+.zakrytie__pravo{min-width:0;grid-column:2 / -1}
+.polosa--yantar .zakrytie__pravo .vvod{color:var(--na-yantare);max-width:40ch}
+.zakrytie__pravo .birka{margin-bottom:var(--s24)}
+.zakrytie__a{margin:0 0 var(--s12);font-size:18px;line-height:1.45;max-width:44ch}
+.zakrytie__hvost{margin:var(--s32) 0 0;font-family:var(--antikva);font-weight:400;
+  font-size:clamp(24px,2.6vw,36px);line-height:1.05;letter-spacing:-.015em}
+
+/* подвал */
+.podval{background:var(--noch);padding:var(--s80) 0 var(--s56);border-top:1px solid var(--liniya)}
+.podval__in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s56);align-items:start}
+.podval__n{font-family:var(--displey);font-weight:400;font-size:clamp(28px,3vw,44px);
+  line-height:.9;letter-spacing:-.03em;margin:0}
+.podval__f p{margin:0 0 var(--s8);color:var(--tekst-2);font-size:16px;line-height:1.5}
+/* ═══ Соцсети в подвале · 17.09.2026 ══════════════════════════════════════
+   Знак плюс слово: знак без подписи читается хуже, а читалке экрана нужно имя.
+   Знаки линейные, под `currentColor` — вставляются инлайном, иначе приходят
+   чёрными. */
+.soc-ryad{display:flex;gap:var(--s24);margin-top:var(--s20);flex-wrap:wrap}
+/* Только знаки, без подписей — решение владельца 17.09. Знак крупнее, чем был
+   рядом со словом, и у ссылки увеличена площадь нажатия: 24 px знака мало для
+   пальца, цель должна быть не меньше 44 px. */
+.soc{display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:44px;margin:-10px;text-decoration:none;color:var(--tekst-2)}
+.soc:hover{color:var(--tekst)}
+/* Значок без адреса: вид тот же, поведения ссылки нет. */
+.soc--bez{cursor:default}
+.soc__z{width:24px;height:24px;flex:0 0 auto}
+.soc-ryad{gap:var(--s20)}
+.podval__f p:last-child{margin-bottom:0}
+.podval__f a{color:var(--tekst)}
+
+/* ═══ страница политики ════════════════════════════════════════════════════ */
+.pravovaya{max-width:760px}
+.pravovaya__h1{font-size:clamp(32px,4.6vw,60px);max-width:none}
+.pravovaya h2{font-size:clamp(22px,2.4vw,32px);margin-top:var(--s56)}
+.pravovaya p{margin:0 0 var(--s16);max-width:66ch;line-height:1.6}
+.pravovaya a{color:var(--yantar-tekst)}
+/* ⛔ Кнопка внутри правовой страницы: `.pravovaya a` (0,1,1) перебивает
+   `.knopka` (0,1,0), и текст кнопки красился в цвет её же янтарной заливки —
+   плашка выходила ПУСТОЙ. Поймано ГЛАЗАМИ 18.09.2026 при просмотре снимка;
+   приборы этого не видели, потому что все гонялись только по index.html.
+   Ровно случай «тронешь тут — поедет там» из разбора архитектуры. */
+.pravovaya .knopka{color:var(--na-yantare)}
+.pravovaya ul{margin:0 0 var(--s16);padding-left:1.2em;max-width:66ch;line-height:1.6}
+
+/* ═══ ВСЕ МЕДИА-ЗАПРОСЫ ОДНИМ ХВОСТОМ · сведены 18.09.2026 ══════════════════
+   Прежде они шли ДВУМЯ группами, между которыми стояли обычные правила добора
+   S11–S15. Медиа-запрос специфичности не добавляет, поэтому всё, что было
+   объявлено МЕЖДУ группами, перебивало первую группу при равной специфичности:
+   три правила были написаны и не действовали, а один «лишний» дубль оказался
+   несущим — без него блок закрытия разъезжался на телефоне в две колонки.
+   Теперь порядок один: обычные правила → медиа по убыванию ширины. Аудит 18.09. */
+
+@media (max-width:1100px){
+  .wrap{padding:0 var(--s24)}
+  .sek{padding:var(--s120) 0}
+  .polosa{padding:var(--s80) 0}
+  .sek__setka{gap:var(--s40)}
+  .razvorot{grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:var(--s40)}
+  .razvorot__tekst{padding:var(--s80) var(--s24) var(--s80) 0}
+  .plita--sdvig{margin-left:var(--s40)}
+  .shag-k,.shag-k--sprava{grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:var(--s40)}
+  .shag-k--sprava{grid-template-columns:minmax(0,1fr) minmax(0,280px)}
+
+  .perechen{column-gap:var(--s40)}
+}
+
+@media (max-width:900px){
+  .sek__setka{grid-template-columns:1fr;gap:var(--s40)}
+  .sek--kadr-vpravo .plita--za-kray{margin-right:0;width:auto}
+  .plita--sdvig{margin-right:0}
+  .ekran__niz{grid-template-columns:1fr;gap:var(--s24)}
+  .proverki{grid-template-columns:1fr;gap:var(--s32)}
+  .proverki > :nth-child(2),.proverki > :nth-child(3){margin-top:0}
+  .klaster{grid-template-columns:1fr;gap:var(--s40)}
+  .klaster > *{grid-column:1/-1 !important;margin-top:0 !important}
+  .shag__telo{grid-template-columns:1fr;gap:var(--s24)}
+  .shag__telo .plita{max-width:420px}
+  .razvorot{grid-template-columns:1fr;gap:0}
+  .razvorot__kadr img{min-height:0;aspect-ratio:4/3}
+  .razvorot--uzhe .razvorot__kadr img{min-height:0}
+  /* ⛔ Портрет: файл 854×1280 (2:3) в боксе 4:3 резался на 50% по высоте, и
+     срезанной оказывалась макушка — проверено глазами на 375 (17.09).
+     Бокс приведён к пропорции кадра, фокус поднят к лицу: срез 11%. */
+  #o-nas .razvorot__kadr img{aspect-ratio:3/4;object-position:50% 28%}
+  .razvorot__tekst{padding:var(--s56) var(--s24)}
+  .stroka__in{grid-template-columns:1fr;gap:var(--s20)}
+  .stroka .birka{white-space:normal}
+  .ryady{columns:1}
+  .zakrytie__in{grid-template-columns:1fr;gap:var(--s32)}
+  .zakrytie__pravo{grid-column:1 / -1}
+  .zakrytie__n{margin-bottom:0}
+  .zakrytie .dejstvie{justify-content:flex-start}
+
+  .perechen{columns:1}
+  .zakrytie__in{grid-template-columns:1fr;gap:var(--s32)}
+  .zakrytie__pravo{grid-column:1 / -1}
+  .zakrytie__n{margin-bottom:0}
+  .podval__in{grid-template-columns:1fr;gap:var(--s24)}
+  .sek--schyot .sek__setka{gap:var(--s24)}
+}
+
+@media (max-width:720px){
+  /* Шаг: кадр над словом, чередование сторон снимается — на одной колонке
+     оно не читается, а порядок «кадр, потом текст» держит и без него. */
+  .shag-k,.shag-k--sprava{grid-template-columns:1fr;gap:var(--s20);padding:var(--s32) 0}
+  .shag-k--sprava .shag-k__kadr{order:0}
+  .shag-k--sprava .shag-k__slovo{order:0}
+  .shag-k__kadr img{height:220px}
+
+  :root{--shapka:112px}   /* две строки: бренд с телефоном, под ними лента пунктов */
+  .wrap{padding:0 18px}
+  body{font-size:16px}
+  .hdr__in{flex-wrap:wrap;gap:var(--s16);padding-top:var(--s16);padding-bottom:var(--s16)}
+  .nav{margin-left:0;order:3;width:100%;gap:var(--s16);flex-wrap:wrap}
+  .hdr__act{margin-left:auto;gap:var(--s12)}
+  .hdr__act .knopka{display:none}
+  .ekran{min-height:88vh;padding-bottom:var(--s40)}
+  .sek{padding:var(--s80) 0}
+  .polosa{padding:var(--s56) 0}
+  .shapka{margin-bottom:var(--s40)}
+  .vvod{font-size:19px}
+  .knopka{white-space:normal;max-width:100%;text-align:center;padding:15px var(--s24)}
+  .dejstvie .knopka{width:100%}
+  .dejstvie{gap:var(--s20);margin-top:var(--s24)}
+  .plita--sdvig{margin-top:0;margin-left:0;margin-right:0}
+  .tovary{grid-template-columns:1fr;gap:var(--s56)}
+  .tovary > :nth-child(2){margin-top:0}
+  /* ⛔ Было 4/3 при файле 880×1100 (4:5) — срез 40% по высоте, у бутылки
+     уходили горлышко и дно. Товар в карточке товара обязан быть целым. */
+  .tovar .plita img{aspect-ratio:4/5}
+  /* ⛔ Первый экран: срез по бокам 68%, в кадр попадала только правая кромка
+     пресса — логотип читался как «АСЕЛ», струи и стакана не было вовсе.
+     Фокус переведён на пресс: в окно входят знак на корпусе, струя и стакан. */
+  .ekran__kadr picture,.ekran__kadr img{object-position:28% 45%}
+  /* Липкая шапка на телефоне: пункты одной лентой с прокруткой вбок вместо
+     переноса на третью строку — иначе шапка съедает пятую часть экрана. */
+  .hdr__in{flex-wrap:wrap;gap:var(--s12);padding-top:var(--s12);padding-bottom:var(--s12)}
+  .brand__znak{width:40px;height:40px}
+  .nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    max-width:100%;padding-bottom:2px;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{white-space:nowrap;font-size:16px}
+  .butyli{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s16)}
+  .shag summary{gap:var(--s20);padding:var(--s24) 0}
+
+  .podzag{margin-top:var(--s80)}
+  .tablica{margin-top:var(--s56)}
+  .razvorot__kadr figcaption{left:18px;bottom:14px}
+
+  .forma{max-width:none}
+  .forma .knopka{justify-self:stretch;width:100%}
+  .vopros summary{gap:var(--s20);padding:var(--s20) 0}
+  .tekst--krupno p{font-size:18px}
+}
+
+@media (max-width:400px){
+  .brand__znak{width:36px;height:36px}
+  .brand__n{font-size:19px}
+  .brand__s{font-size:10px;letter-spacing:.1em}
+  .tel{font-size:15px}
+}
