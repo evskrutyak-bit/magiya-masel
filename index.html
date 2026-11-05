@@ -995,12 +995,12 @@ html.modern-fx .hdr__soc:hover {
 
 
 /* ═══ НОВАЯ ВЁРСТКА СЕКЦИИ «КОМУ НЕ ПОДХОДИТ» ══════════════════════════════ */
+/* ═══ СЕТКА КАРТОЧЕК «КОМУ НЕ ПОДХОДИТ» (ПРЕМИУМ GLOW 2026) ══════════════════ */
 .komu-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 18px;
   margin-top: var(--s32);
-  margin-bottom: var(--s32);
 }
 @media (max-width: 1024px) {
   .komu-grid {
@@ -1013,73 +1013,61 @@ html.modern-fx .hdr__soc:hover {
   }
 }
 .komu-card {
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(241, 238, 226, 0.1);
-  border-radius: 18px;
-  padding: 20px;
+  position: relative;
+  background: radial-gradient(circle at 50% 0%, rgba(229, 163, 60, 0.16) 0%, rgba(23, 30, 24, 0.96) 75%);
+  border: 1px solid rgba(229, 163, 60, 0.32);
+  border-radius: 20px;
+  padding: 24px 22px;
   display: flex;
   flex-direction: column;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.komu-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(229, 163, 60, 0.85), transparent);
+  pointer-events: none;
 }
 .komu-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(229, 163, 60, 0.45);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  transform: translateY(-5px);
+  background: radial-gradient(circle at 50% -10%, rgba(229, 163, 60, 0.28) 0%, rgba(20, 26, 21, 0.98) 75%);
+  border-color: rgba(229, 163, 60, 0.65);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55), 0 0 35px rgba(229, 163, 60, 0.22);
 }
 .komu-card__head {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 .komu-card__dot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: var(--yantar);
-  box-shadow: 0 0 10px rgba(229, 163, 60, 0.6);
+  box-shadow: 0 0 12px rgba(229, 163, 60, 0.9);
   flex-shrink: 0;
 }
 .komu-card__name {
   font-family: var(--displey);
-  font-size: 16px;
-  font-weight: 500;
-  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #FFFFFF;
 }
 .komu-card__text {
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--tekst-2);
-  margin: 0;
-}
-.komu-quote {
-  background: rgba(229, 163, 60, 0.08);
-  border: 1px solid rgba(229, 163, 60, 0.25);
-  border-radius: 18px;
-  padding: 20px 24px;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-top: var(--s24);
-}
-.komu-quote__icon {
-  font-size: 24px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.komu-quote__body p {
-  margin: 0 0 6px;
-  font-size: 14.5px;
+  font-size: 14px;
   line-height: 1.5;
-  color: var(--tekst);
-}
-.komu-quote__body p:last-child {
-  margin-bottom: 0;
-}
-.komu-quote__sub {
-  color: var(--tekst-2) !important;
-  font-size: 13px !important;
+  color: #D6D2C4;
+  margin: 0;
 }
 
 /* ═══ ВАРИАНТ 1: КАРТОЧКИ «КРАФТОВЫЙ БУТИК» ═════════════════════════════════ */
@@ -1858,15 +1846,6 @@ html.modern-fx .hdr__soc:hover {
     <p class="komu-card__text">Индивидуальная непереносимость подсолнечника (встречается крайне редко).</p>
   </div>
 </div>
-
-<div class="komu-quote">
-  <div class="komu-quote__icon">💡</div>
-  <div class="komu-quote__body">
-    <p><strong>По конопляному, кунжутному и ароматному подсолнечному</strong> прямых ограничений на этикетке нет — отвечу словами у прилавка.</p>
-    <p class="komu-quote__sub">Не уверены, подходит ли вам конкретное масло? Обязательно посоветуйтесь с врачом. Я давлю честный чистый продукт, но ваше здоровье всегда на первом месте.</p>
-  </div>
-</div>
-
 </div></section>
 <section class="sek sek--40-60" id="dostavka"><div class="wrap sek__setka"><div class="sek__uzkaya"><h2>Доставка и оплата</h2><div class="tekst"><p>Возим по Калининграду и области. Самовывоз с прилавка на Центральном рынке или курьер по городу. Условия доставки — по телефону.</p><p>Оплата: наличные, карта, СБП.</p><p><a href="tel:+79147585418">+7 914 758 54 18</a>, с 9 до 21. Трубку беру сам.</p></div></div><div class="sek__shirokaya"><h3>Написать мне</h3><p class="forma__vvod">Письмо уйдёт мне на почту, отвечаю сам. Нужно быстро — звоните: <a href="tel:+79147585418">+7 914 758 54 18</a>, с 9 до 21.</p><form class="forma" id="lead-form" method="post" novalidate><p class="pole"><label for="f-name">Как вас зовут</label><input id="f-name" name="name" type="text" autocomplete="name" required></p><p class="pole"><label for="f-contact">Телефон или почта</label><input id="f-contact" name="contact" type="text" autocomplete="tel" required></p><p class="pole"><label for="f-msg">Что нужно</label><textarea id="f-msg" name="msg" rows="3"></textarea></p><label class="forma__soglasie"><input id="f-agree" name="agree" type="checkbox" required><span>Согласен на обработку персональных данных. <a href="politika.html" target="_blank">Политика конфиденциальности</a></span></label><button class="knopka" type="submit">Отправить</button><p class="forma__otvet" id="form-msg" hidden></p></form></div></div></section>
 <section class="polosa polosa--oliva" id="voprosy"><div class="wrap"><div class="shapka"><h2>Вопросы</h2></div><div class="lestnica"><details class="vopros"><summary><span class="vopros__t">Это точно не подсолнечное с ароматизатором?</span><span class="shag__znak" aria-hidden="true"></span></summary><div class="vopros__telo tekst"><p>Вы видите семечку, из которой это масло отжали, и видите пресс. Отжим идёт при вас, прямо на прилавке. Верить здесь не надо ни одному моему слову.</p></div></details><details class="vopros"><summary><span class="vopros__t">Почему масло горчит?</span><span class="shag__znak" aria-hidden="true"></span></summary><div class="vopros__telo tekst"><p>Зависит от масла. У чёрного тмина и расторопши горечь идёт от состава: тимохинон и силимарин. Льняное и подсолнечное горчить не должны, у них горечь говорит об окислении. У кедрового бывает лёгкая ореховая горчинка в послевкусии; если горечь выраженная, смотрим дату отжима и пробуем вместе.</p></div></details><details class="vopros"><summary><span class="vopros__t">Сколько хранить после того, как открыл?</span><span class="shag__znak" aria-hidden="true"></span></summary><div class="vopros__telo tekst"><p>Месяц, так стоит на этикетке. Держать от +5 до +25 градусов, влажность не выше 85 процентов. Подоконник не годится: там и свет, и перепад тепла.</p></div></details><details class="vopros"><summary><span class="vopros__t">Какую бутылку брать, 100 или 250 мл?</span><span class="shag__znak" aria-hidden="true"></span></summary><div class="vopros__telo tekst"><p>Считайте по ложке: 100 мл хватает дней на двадцать и укладывается в месяц после вскрытия, 250 мл — это фасовка на кухню. Обе есть у восьми масел из одиннадцати.</p></div></details><details class="vopros"><summary><span class="vopros__t">Как проходит проба?</span><span class="shag__znak" aria-hidden="true"></span></summary><div class="vopros__telo tekst"><p>Скажите, какое масло хотите попробовать, — налью прямо у прилавка. Пробуете, потом решаете, брать или нет. Денег до этого не беру.</p></div></details><details class="vopros"><summary><span class="vopros__t">Пресс не работает, когда я подошёл. Отожмёте при мне?</span><span class="shag__znak" aria-hidden="true"></span></summary><div class="vopros__telo tekst"><p>Отожму. Скажите, какое масло, и запущу пресс.</p></div></details><details class="vopros"><summary><span class="vopros__t">Доставляете?</span><span class="shag__znak" aria-hidden="true"></span></summary><div class="vopros__telo tekst"><p>Возим по Калининграду и области. Самовывоз с прилавка на Центральном рынке или курьер по городу. Условия доставки — по телефону.</p></div></details><details class="vopros"><summary><span class="vopros__t">Где именно вас искать на рынке?</span><span class="shag__znak" aria-hidden="true"></span></summary><div class="vopros__telo tekst"><p>Калининград, улица Черняховского, 15–15а, Центральный рынок, павильон молочных продуктов. Это крытый и утеплённый корпус, там творог, сыр и сметана; рядом хлебобулочные. Я у входа, возле стеклянной стены. Ориентир: ищите пресс, он стоит прямо на прилавке.</p></div></details></div></div></section>
