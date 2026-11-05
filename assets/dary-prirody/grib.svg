@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#2D3A29"/>
+      <stop offset="60%" stop-color="#1B2418"/>
+      <stop offset="100%" stop-color="#10170F"/>
+    </radialGradient>
+    <radialGradient id="amberGlow" cx="50%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="#E5A33C" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#E5A33C" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="capGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9C5A24"/>
+      <stop offset="60%" stop-color="#5E3111"/>
+      <stop offset="100%" stop-color="#3A1C07"/>
+    </linearGradient>
+    <linearGradient id="goldAcc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD685"/>
+      <stop offset="50%" stop-color="#E5A33C"/>
+      <stop offset="100%" stop-color="#A76C1B"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+  <rect width="500" height="500" fill="url(#bg)"/>
+  <circle cx="250" cy="230" r="180" fill="url(#amberGlow)"/>
+  
+  <!-- Outer decorative ring -->
+  <circle cx="250" cy="240" r="160" fill="none" stroke="#E5A33C" stroke-opacity="0.2" stroke-width="1.5" stroke-dasharray="6 6"/>
+  <circle cx="250" cy="240" r="145" fill="none" stroke="#E5A33C" stroke-opacity="0.35" stroke-width="1"/>
+  
+  <!-- Taiga botanical elements -->
+  <path d="M140 330 C 130 290, 160 260, 180 250 C 170 280, 175 310, 160 340 Z" fill="#4B6342" opacity="0.6"/>
+  <path d="M360 330 C 370 290, 340 260, 320 250 C 330 280, 325 310, 340 340 Z" fill="#4B6342" opacity="0.6"/>
+  <path d="M120 310 C 150 300, 170 320, 160 350" stroke="#7A9A6E" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M380 310 C 350 300, 330 320, 340 350" stroke="#7A9A6E" stroke-width="2" fill="none" opacity="0.4"/>
+
+  <!-- Apothecary Bottle / Extract -->
+  <g filter="url(#shadow)">
+    <!-- Bottle body -->
+    <rect x="205" y="195" width="90" height="155" rx="14" fill="#1C1813" stroke="url(#goldAcc)" stroke-width="2.5"/>
+    <rect x="212" y="202" width="76" height="141" rx="10" fill="#2E2317" opacity="0.8"/>
+    <!-- Liquid glow inside -->
+    <rect x="216" y="240" width="68" height="98" rx="6" fill="#8C4914" opacity="0.85"/>
+    <!-- Bottle shoulder & neck -->
+    <path d="M225 195 L225 165 L275 165 L275 195 Z" fill="#1C1813" stroke="url(#goldAcc)" stroke-width="2"/>
+    <!-- Wooden Cap -->
+    <rect x="218" y="145" width="64" height="22" rx="4" fill="url(#capGrad)" stroke="#E5A33C" stroke-width="1.5"/>
+    
+    <!-- Botanical Label on bottle -->
+    <rect x="220" y="228" width="60" height="75" rx="4" fill="#F4EFE6" stroke="#C28236" stroke-width="1"/>
+    <circle cx="250" cy="252" r="14" fill="none" stroke="#2D3A29" stroke-width="1.2"/>
+    <!-- Mushroom emblem inside label -->
+    <path d="M243 252 C243 245, 257 245, 257 252 Z" fill="#8C4914"/>
+    <path d="M248 252 L248 260 L252 260 L252 252 Z" fill="#C28236"/>
+    <!-- Label lines -->
+    <line x1="230" y1="274" x2="270" y2="274" stroke="#2D3A29" stroke-width="1.5"/>
+    <line x1="235" y1="281" x2="265" y2="281" stroke="#8C4914" stroke-width="1"/>
+    <line x1="238" y1="288" x2="262" y2="288" stroke="#999" stroke-width="0.8"/>
+    <text x="250" y="297" font-family="'JetBrains Mono', monospace" font-size="6" font-weight="bold" fill="#2D3A29" text-anchor="middle">ТАЙГА · 100%</text>
+  </g>
+
+  <!-- Specular glint -->
+  <line x1="216" y1="210" x2="216" y2="330" stroke="#FFF" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
+</svg>
